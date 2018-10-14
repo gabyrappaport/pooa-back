@@ -1,16 +1,14 @@
-import sqlite3
-
+from DataBase.Helper.DatabaseConnector import *
 from Controllers.Helper.WritingDataBaseError import WritingDataBaseError
 
 
 class ShipmentDataBase:
 
     def __init__(self):
-        self.conn = sqlite3.connect('itn.db')
-        self.c = self.conn.cursor()
+        pass
 
     def get_shipments_expedition_date(self, expedition_date):
-        query = self.c.execute("SELECT * FROM Shipments WHERE expedition_date=?", (expedition_date,))
+        query = Database.query("SELECT * FROM Shipments WHERE expedition_date=?", (expedition_date,))
         result = []
         for row in query:
             shipment = self.__list_to_dic_shipment(row)
@@ -18,7 +16,7 @@ class ShipmentDataBase:
         return result
 
     def get_shipments_id_order(self, id_order):
-        query = self.c.execute("SELECT * FROM Shipments WHERE id_shipment IN "
+        query = Database.query("SELECT * FROM Shipments WHERE id_shipment IN "
                                "(SELECT DISTINCT id_shipment FROM Products WHERE id_order=?)", (id_order,))
         result = []
         for row in query:
@@ -27,14 +25,14 @@ class ShipmentDataBase:
         return result
 
     def get_shipment_id_shipment(self, id_shipment):
-        query_shipment = self.c.execute("SELECT * FROM Shipments WHERE id_shipment = ?",
-                                        (id_shipment,))  # EUh, attention, la virgule est importante
+        query_shipment = Database.query("SELECT * FROM Shipments WHERE id_shipment = ?",
+                                        (id_shipment,))
         shipment = query_shipment.fetchone()
         result = self.__list_to_dic_shipment(shipment)
         return result
 
     def get_all_shipments(self):
-        query = self.c.execute("SELECT * FROM Shipments")
+        query = Database.query("SELECT * FROM Shipments")
         result = []
         for row in query:
             shipment = self.__list_to_dic_shipment(row)
@@ -48,8 +46,7 @@ class ShipmentDataBase:
                       shipment.get_transportation(),
                       shipment.get_departure_location(),
                       shipment.get_arrival_location())
-            self.c.execute("INSERT INTO Shipments VALUES (?,?,?,?,?)", values)
-            self.conn.commit()  # Si on fait pas ca, ca enregistre pas les données dans la table.
+            Database.query("INSERT INTO Shipments VALUES (?,?,?,?,?)", values)
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
@@ -60,20 +57,18 @@ class ShipmentDataBase:
                       shipment.get_departure_location(),
                       shipment.get_arrival_location(),
                       shipment.get_id_shipment())
-            self.c.execute("UPDATE Shipments "
+            Database.query("UPDATE Shipments "
                            "SET expedition_date = ?,"
                            "transportation = ?,"
                            "departure_location = ?,"
                            "arrival_location = ?"
                            "WHERE id_shipment = ?", values)
-            self.conn.commit()  # Si on fait pas ca, ca enregistre pas les données dans la table.
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
     def delete_shipment(self, id_shipment):
-        self.c.execute("DELETE from Shipments "
+        Database.query("DELETE from Shipments "
                        "WHERE id_shipment = ?", (id_shipment,))
-        self.conn.commit()
 
     def __list_to_dic_shipment(self, shipment):
         return {"id_shipment": shipment[0],

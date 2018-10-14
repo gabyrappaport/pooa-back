@@ -7,7 +7,6 @@ class Partner:
             Partner.counter += 1
         else:
             self.__id_partner = id_partner
-        self.__id_partner = id_partner
         self.__partner_type = partner_type
         self.__company = company
 
