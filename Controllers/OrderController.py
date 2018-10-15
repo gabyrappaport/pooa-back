@@ -19,11 +19,11 @@ class OrderController(Resource):
 
     def get(self):
         try:
-            if request.data:
-                data = request.get_json(force=True)
-                order = self.order_db.get_order(data["id_order"])
+            if request.args.get("id_order"):
+                id_order = request.args.get("id_order")
+                order = self.order_db.get_order(id_order)
                 if order is not None:
-                    order["products"] = self.product_db.get_products(data["id_order"])
+                    order["products"] = self.product_db.get_products(id_order)
                 return HttpResponse(HttpStatus.OK,
                                     data=order).get_response()
             else:

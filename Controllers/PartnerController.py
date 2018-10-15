@@ -16,21 +16,21 @@ class PartnerController(Resource):
 
     def get(self):
         try:
-            if request.data:
-                data = request.get_json(force=True)
-                if "id_partner" in data.keys():
-                    partner = self.partner_db.get_partner(data["id_partner"])
-                    return HttpResponse(HttpStatus.OK,
+            if request.args.get("id_partner"):
+                id_partner = request.args.get("id_partner")
+                partner = self.partner_db.get_partner(id_partner)
+                return HttpResponse(HttpStatus.OK,
                                         data=partner).get_response()
-                elif "partner_type" in data.keys():
-                    if data["partner_type"] == "supplier":
-                        suppliers = self.partner_db.get_suppliers()
-                        return HttpResponse(HttpStatus.OK,
-                                            data=suppliers).get_response()
-                    elif data["partner_type"] == "client":
-                        clients = self.partner_db.get_clients()
-                        return HttpResponse(HttpStatus.OK,
-                                            data=clients).get_response()
+            elif request.args.get("partner_type"):
+                partner_type = request.args.get("partner_type")
+                if partner_type == "supplier":
+                    suppliers = self.partner_db.get_suppliers()
+                    return HttpResponse(HttpStatus.OK,
+                                        data=suppliers).get_response()
+                elif partner_type == "client":
+                    clients = self.partner_db.get_clients()
+                    return HttpResponse(HttpStatus.OK,
+                                        data=clients).get_response()
             else:
                 return HttpResponse(HttpStatus.OK,
                                     data=self.partner_db.get_all_partners()).get_response()

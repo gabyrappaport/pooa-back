@@ -18,20 +18,18 @@ class ShipmentController(Resource):
     def get(self):
         # ATTENTION, il faudra pas oublier d'ajouter les products
         try:
-            if request.data:
-                data = request.get_json(force=True)
-                if "expedition_date" in data.keys():
-                    shipments = self.shipment_db.get_shipments_expedition_date(data["expedition_date"])
-                    return HttpResponse(HttpStatus.OK,
-                                        data=shipments).get_response()
-                elif "id_order" in data.keys():
-                    shipments = self.shipment_db.get_shipments_id_order(data["id_order"])
-                    return HttpResponse(HttpStatus.OK,
-                                        data=shipments).get_response()
-                elif "id_shipment" in data.keys():
-                    shipments = self.shipment_db.get_shipment_id_shipment(data["id_shipment"])
-                    return HttpResponse(HttpStatus.OK,
-                                        data=shipments).get_response()
+            if request.args.get("expedition_date"):
+                shipments = self.shipment_db.get_shipments_expedition_date(request.args.get("expedition_date")])
+                return HttpResponse(HttpStatus.OK,
+                                    data=shipments).get_response()
+            elif request.args.get("id_order"):
+                shipments = self.shipment_db.get_shipments_id_order(request.args.get("id_order"))
+                return HttpResponse(HttpStatus.OK,
+                                    data=shipments).get_response()
+            elif request.args.get("id_shipment"):
+                shipments = self.shipment_db.get_shipment_id_shipment(request.args.get("id_shipment"))
+                return HttpResponse(HttpStatus.OK,
+                                    data=shipments).get_response()
             else:
                 return HttpResponse(HttpStatus.OK,
                                     data=self.shipment_db.get_all_shipments()).get_response()
