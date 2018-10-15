@@ -45,8 +45,8 @@ class OrderDataBase:
                       int(order.get_id_order()))
 
             Database.query("UPDATE Orders "
-                           "SET supplier = ?,"
-                           "client = ?,"
+                           "SET id_supplier = ?,"
+                           "id_client = ?,"
                            "expected_delivery_date = ?,"
                            "payment_type = ?"
                            "WHERE id_order = ?", values)

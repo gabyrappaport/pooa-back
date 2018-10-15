@@ -1,5 +1,7 @@
+import os
 import sqlite3
 
+os.remove("itn.db")
 conn = sqlite3.connect("itn.db")
 
 cursor = conn.cursor()
