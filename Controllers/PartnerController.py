@@ -2,10 +2,9 @@ import werkzeug
 from flask import request
 from flask_restful import Resource
 
-from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from Controllers.Helper import WritingDataBaseError
+from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.PartnerDataBase import PartnerDataBase
-
 from Models.Partner import Partner
 
 
@@ -20,7 +19,7 @@ class PartnerController(Resource):
                 id_partner = request.args.get("id_partner")
                 partner = self.partner_db.get_partner(id_partner)
                 return HttpResponse(HttpStatus.OK,
-                                        data=partner).get_response()
+                                    data=partner).get_response()
             elif request.args.get("partner_type"):
                 partner_type = request.args.get("partner_type")
                 if partner_type == "supplier":
@@ -58,7 +57,7 @@ class PartnerController(Resource):
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
-    def delete(self): #delete by id mais est_ce qu'on connaît l'id ?
+    def delete(self):  # delete by id mais est_ce qu'on connaît l'id ?
         try:
             data = request.get_json(force=True)
             self.partner_db.delete_partner(data["id_partner"])

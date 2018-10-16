@@ -3,6 +3,7 @@ import datetime
 import werkzeug
 from flask import request
 from flask_restful import Resource
+from flask_restful.utils.cors import crossdomain
 
 from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.OrderDataBase import *
@@ -38,13 +39,15 @@ class OrderController(Resource):
     def post(self):
         try:
             data = request.get_json(force=True)
-            order = Order(int(data["supplier"]),
-                          int(data["client"]),
-                          datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
+            print(data)
+            order = Order(int(data["id_supplier"]),
+                          int(data["id_client"]),
+                          datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
                           str(data["payment_type"]))
             self.order_db.add_order(order)
             products = []
             for p in data["products"]:
+                print(p)
                 product = Product(int(order.get_id_order()),
                                   str(p["reference"]),
                                   str(p["color"]),
@@ -88,6 +91,7 @@ class OrderController(Resource):
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
+    @crossdomain(origin='*')
     def delete(self):
         try:
             data = request.get_json(force=True)
