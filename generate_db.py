@@ -10,7 +10,13 @@ Orders(id_order INTEGER PRIMARY KEY UNIQUE,
      id_supplier INTEGER,
      id_client INTEGER,
      expected_delivery_date DATE,
-     payment_type TEXT
+     payment_type TEXT,
+     l_dips TEXT,
+     appro_ship_sample TEXT,
+     appro_s_off TEXT,
+     ship_sample_2h TEXT,
+     total_amount REAL,
+     creation_date DATE
       )""")
 
 cursor.execute("""CREATE TABLE IF NOT EXISTS 
@@ -33,7 +39,8 @@ Products(id_product INTEGER PRIMARY KEY UNIQUE,
      reference TEXT,
      color TEXT,
      meter REAL,
-     price REAL)''')
+     price REAL,
+     commission REAL)''')
 
 
 conn.commit()

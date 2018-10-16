@@ -19,7 +19,7 @@ class ShipmentController(Resource):
         # ATTENTION, il faudra pas oublier d'ajouter les products
         try:
             if request.args.get("expedition_date"):
-                shipments = self.shipment_db.get_shipments_expedition_date(request.args.get("expedition_date")])
+                shipments = self.shipment_db.get_shipments_expedition_date(request.args.get("expedition_date"))
                 return HttpResponse(HttpStatus.OK,
                                     data=shipments).get_response()
             elif request.args.get("id_order"):

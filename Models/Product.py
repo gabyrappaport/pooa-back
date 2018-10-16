@@ -1,7 +1,7 @@
 class Product:
     counter = 0
 
-    def __init__(self, id_order, reference, color, meter, price, id_shipment=None, id_product=None):
+    def __init__(self, id_order, reference, color, meter, price, commission, id_shipment=None, id_product=None):
         if id_product is None:
             self.__id_product = Product.counter
             Product.counter += 1
@@ -13,6 +13,7 @@ class Product:
         self.__color = color
         self.__meter = meter
         self.__price = price
+        self.__commission = commission
 
     def get_id_product(self):
         return self.__id_product
@@ -52,3 +53,9 @@ class Product:
 
     def set_price(self, price):
         self.__price = price
+
+    def get_commission(self):
+        return self.__commission
+
+    def set_commission(self, commission):
+        self.__commission = commission
