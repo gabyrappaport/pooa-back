@@ -72,14 +72,13 @@ class OrderController(Resource):
                           int(data["client"]),
                           datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
                           str(data["payment_type"]),
-                          datetime.datetime.strptime(data["creation_date"], "%d-%m-%Y").date(),
                           str(data["l_dips"]),
                           str(data["appro_ship_sample"]),
                           str(data["appro_s_off"]),
                           str(data["ship_sample_2h"]),
                           id_order=int(data["id_order"]))
-            self.order_db.update_order(order)
             id_products_keep = []
+            total_amount = 0
             for p in data["products"]:
                 if "id_product" in p.keys():
                     product = Product(int(order.get_id_order()),
@@ -89,6 +88,7 @@ class OrderController(Resource):
                                       float(p["price"]),
                                       float(p["commission"]),
                                       id_product=int(p["id_product"]))
+                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
                     self.product_db.update_product(product)
                 else:
                     product = Product(int(order.get_id_order()),
@@ -97,8 +97,11 @@ class OrderController(Resource):
                                       float(p["meter"]),
                                       float(p["price"]),
                                       float(p["commission"]))
+                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
                     self.product_db.add_product(product)
                 id_products_keep.append(product.get_id_product())
+            order.set_total_amount(total_amount)
+            self.order_db.update_order(order)
             self.product_db.delete_product(order.get_id_order(), id_products_keep)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:

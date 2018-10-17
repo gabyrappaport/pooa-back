@@ -19,7 +19,13 @@ class ProductDatabase:
                 float(product.get_price()),
                 float(product.get_commission()))
 
-            Database.query(" INSERT INTO Products(id_product, id_order, reference,color,meter,price,commission) "
+            Database.query(" INSERT INTO Products(id_product,"
+                           "id_order,"
+                           "reference,"
+                           "color,"
+                           "meter,"
+                           "price,"
+                           "commission) "
                            "VALUES(?,?,?,?,?,?,?) ", values)
 
             if product.get_id_shipment():

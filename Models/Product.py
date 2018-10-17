@@ -5,6 +5,8 @@ class Product:
         if id_product is None:
             self.__id_product = Product.counter
             Product.counter += 1
+            print(Product.counter)
+
         else:
             self.__id_product = id_product
         self.__id_order = id_order
