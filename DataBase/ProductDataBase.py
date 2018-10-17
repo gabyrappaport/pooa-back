@@ -16,10 +16,17 @@ class ProductDatabase:
                 str(product.get_reference()),
                 str(product.get_color()),
                 float(product.get_meter()),
-                float(product.get_price()))
+                float(product.get_price()),
+                float(product.get_commission()))
 
-            Database.query(" INSERT INTO Products(id_product, id_order, reference,color,meter,price) "
-                           "VALUES(?,?,?,?,?,?) ", values)
+            Database.query(" INSERT INTO Products(id_product,"
+                           "id_order,"
+                           "reference,"
+                           "color,"
+                           "meter,"
+                           "price,"
+                           "commission) "
+                           "VALUES(?,?,?,?,?,?,?) ", values)
 
             if product.get_id_shipment():
                 values = (int(product.get_id_shipment()),
@@ -35,7 +42,8 @@ class ProductDatabase:
         """Delete a product with its reference"""
         Database.query("DELETE FROM Products WHERE id_product = ?", (id_product,))
 
-    def delete_product(self, id_order, id_products_keep):
+    def delete_old_products(self, id_order, id_products_keep):
+        """Delete the products that need to be delete during the update of an order"""
         if len(id_products_keep) == 1:
             sql = "DELETE FROM Products WHERE id_order = ? AND id_product  != ?"
             values = (id_order, id_products_keep[0])
@@ -65,6 +73,7 @@ class ProductDatabase:
                       product.get_color(),
                       product.get_meter(),
                       int(product.get_price()),
+                      float(product.get_commission()),
                       int(product.get_id_product()))
 
             Database.query("UPDATE Products "
@@ -72,7 +81,8 @@ class ProductDatabase:
                            "reference = ?,"
                            "color = ?,"
                            "meter = ?,"
-                           "price = ?"
+                           "price = ?,"
+                           "commission = ?"
                            "WHERE id_product = ?", values)
 
             if product.get_id_shipment():
@@ -98,4 +108,5 @@ class ProductDatabase:
                 "reference": product[3],
                 "color": product[4],
                 "meter": product[5],
-                "price": product[6]}
+                "price": product[6],
+                "commission": product[7]}

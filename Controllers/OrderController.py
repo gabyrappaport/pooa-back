@@ -3,7 +3,6 @@ import datetime
 import werkzeug
 from flask import request
 from flask_restful import Resource
-from flask_restful.utils.cors import crossdomain
 
 from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.OrderDataBase import *
@@ -39,22 +38,28 @@ class OrderController(Resource):
     def post(self):
         try:
             data = request.get_json(force=True)
-            print(data)
             order = Order(int(data["id_supplier"]),
                           int(data["id_client"]),
-                          datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
-                          str(data["payment_type"]))
-            self.order_db.add_order(order)
+                          datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
+                          str(data["payment_type"]),
+                          str(data["l_dips"]),
+                          str(data["appro_ship_sample"]),
+                          str(data["appro_s_off"]),
+                          str(data["ship_sample_2h"]))
             products = []
+            total_amount = 0
             for p in data["products"]:
-                print(p)
                 product = Product(int(order.get_id_order()),
                                   str(p["reference"]),
                                   str(p["color"]),
                                   float(p["meter"]),
-                                  float(p["price"]))
+                                  float(p["price"]),
+                                  float(p["commission"]))
                 products.append(product)
                 self.product_db.add_product(product)
+                total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
+            order.set_total_amount(total_amount)
+            self.order_db.add_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -66,9 +71,13 @@ class OrderController(Resource):
                           int(data["client"]),
                           datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
                           str(data["payment_type"]),
+                          str(data["l_dips"]),
+                          str(data["appro_ship_sample"]),
+                          str(data["appro_s_off"]),
+                          str(data["ship_sample_2h"]),
                           id_order=int(data["id_order"]))
-            self.order_db.update_order(order)
             id_products_keep = []
+            total_amount = 0
             for p in data["products"]:
                 if "id_product" in p.keys():
                     product = Product(int(order.get_id_order()),
@@ -76,26 +85,35 @@ class OrderController(Resource):
                                       str(p["color"]),
                                       float(p["meter"]),
                                       float(p["price"]),
+                                      float(p["commission"]),
                                       id_product=int(p["id_product"]))
+                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
                     self.product_db.update_product(product)
                 else:
                     product = Product(int(order.get_id_order()),
                                       str(p["reference"]),
                                       str(p["color"]),
                                       float(p["meter"]),
-                                      float(p["price"]))
+                                      float(p["price"]),
+                                      float(p["commission"]))
+                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
                     self.product_db.add_product(product)
                 id_products_keep.append(product.get_id_product())
-            self.product_db.delete_product(order.get_id_order(), id_products_keep)
+            order.set_total_amount(total_amount)
+            self.order_db.update_order(order)
+            self.product_db.delete_old_products(order.get_id_order(), id_products_keep)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
-    @crossdomain(origin='*')
     def delete(self):
         try:
             data = request.get_json(force=True)
             self.order_db.delete_order(data["id_order"])
+            products = self.product_db.get_products(data["id_order"])
+            for i in products:
+                print(i)
+                self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
