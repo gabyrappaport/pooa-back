@@ -41,25 +41,17 @@ class OrderController(Resource):
             order = Order(int(data["supplier"]),
                           int(data["client"]),
                           datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
-                          str(data["payment_type"]),
-                          str(data["l_dips"]),
-                          str(data["appro_ship_sample"]),
-                          str(data["appro_s_off"]),
-                          str(data["ship_sample_2h"]))
+                          str(data["payment_type"]))
+            self.order_db.add_order(order)
             products = []
-            total_amount = 0
             for p in data["products"]:
                 product = Product(int(order.get_id_order()),
                                   str(p["reference"]),
                                   str(p["color"]),
                                   float(p["meter"]),
-                                  float(p["price"]),
-                                  float(p["commission"]))
+                                  float(p["price"]))
                 products.append(product)
                 self.product_db.add_product(product)
-                total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
-            order.set_total_amount(total_amount)
-            self.order_db.add_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -71,11 +63,6 @@ class OrderController(Resource):
                           int(data["client"]),
                           datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
                           str(data["payment_type"]),
-                          datetime.datetime.strptime(data["creation_date"], "%d-%m-%Y").date(),
-                          str(data["l_dips"]),
-                          str(data["appro_ship_sample"]),
-                          str(data["appro_s_off"]),
-                          str(data["ship_sample_2h"]),
                           id_order=int(data["id_order"]))
             self.order_db.update_order(order)
             id_products_keep = []
@@ -86,7 +73,6 @@ class OrderController(Resource):
                                       str(p["color"]),
                                       float(p["meter"]),
                                       float(p["price"]),
-                                      float(p["commission"]),
                                       id_product=int(p["id_product"]))
                     self.product_db.update_product(product)
                 else:
@@ -94,8 +80,7 @@ class OrderController(Resource):
                                       str(p["reference"]),
                                       str(p["color"]),
                                       float(p["meter"]),
-                                      float(p["price"]),
-                                      float(p["commission"]))
+                                      float(p["price"]))
                     self.product_db.add_product(product)
                 id_products_keep.append(product.get_id_product())
             self.product_db.delete_product(order.get_id_order(), id_products_keep)
