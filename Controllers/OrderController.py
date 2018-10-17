@@ -3,7 +3,6 @@ import datetime
 import werkzeug
 from flask import request
 from flask_restful import Resource
-from flask_restful.utils.cors import crossdomain
 
 from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.OrderDataBase import *
@@ -102,16 +101,19 @@ class OrderController(Resource):
                 id_products_keep.append(product.get_id_product())
             order.set_total_amount(total_amount)
             self.order_db.update_order(order)
-            self.product_db.delete_product(order.get_id_order(), id_products_keep)
+            self.product_db.delete_old_products(order.get_id_order(), id_products_keep)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
-    @crossdomain(origin='*')
     def delete(self):
         try:
             data = request.get_json(force=True)
             self.order_db.delete_order(data["id_order"])
+            products = self.product_db.get_products(data["id_order"])
+            for i in products:
+                print(i)
+                self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()

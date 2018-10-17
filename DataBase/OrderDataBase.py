@@ -53,7 +53,6 @@ class OrderDataBase:
                       order.get_appro_s_off(),
                       order.get_ship_sample_2h(),
                       order.get_total_amount(),
-                      order.get_creation_date(),
                       int(order.get_id_order()))
 
             Database.query("UPDATE Orders "
@@ -65,8 +64,7 @@ class OrderDataBase:
                            "appro_ship_sample = ?,"
                            "appro_s_off = ?,"
                            "ship_sample_2h = ?,"
-                           "total_amount = ?,"
-                           "creation_date = ?"
+                           "total_amount = ?"
                            "WHERE id_order = ?", values)
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")

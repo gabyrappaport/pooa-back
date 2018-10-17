@@ -42,7 +42,8 @@ class ProductDatabase:
         """Delete a product with its reference"""
         Database.query("DELETE FROM Products WHERE id_product = ?", (id_product,))
 
-    def delete_product(self, id_order, id_products_keep):
+    def delete_old_products(self, id_order, id_products_keep):
+        """Delete the products that need to be delete during the update of an order"""
         if len(id_products_keep) == 1:
             sql = "DELETE FROM Products WHERE id_order = ? AND id_product  != ?"
             values = (id_order, id_products_keep[0])
