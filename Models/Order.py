@@ -1,7 +1,7 @@
 import datetime
+from Models.ExcelModel import ExcelModel
 
-
-class Order:
+class Order(ExcelModel):
     counter = 0
 
     def __init__(self, id_supplier, id_client, expected_delivery_date, payment_type,
@@ -94,3 +94,10 @@ class Order:
 
     def set_total_amount(self, total_amount):
         self.__total_amount = total_amount
+
+    def print_to_cell(self,worksheet,cell):
+        worksheet[str(cell[0])]=self.__id_order
+        worksheet[str(cell[1])]=self.__supplier
+        worksheet[str(cell[2])]=self.__client
+        worksheet[str(cell[3])]=self.__expected_delivery_date
+        worksheet[str(cell[4])]=self.__payment_type

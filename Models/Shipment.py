@@ -1,4 +1,6 @@
-class Shipment:
+from Models.ExcelModel import ExcelModel
+
+class Shipment(ExcelModel):
     counter = 0
 
     def __init__(self, expedition_date, transportation,

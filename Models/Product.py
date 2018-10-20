@@ -1,4 +1,6 @@
-class Product:
+from Models.ExcelModel import ExcelModel
+
+class Product(ExcelModel):
     counter = 0
 
     def __init__(self, id_order, reference, color, meter, price, commission, id_shipment=None, id_product=None):
