@@ -59,8 +59,9 @@ class PartnerController(Resource):
 
     def delete(self):  # delete by id mais est_ce qu'on connaît l'id ?
         try:
-            data = request.get_json(force=True)
-            self.partner_db.delete_partner(data["id_partner"])
+            #data = request.get_json(force=True)
+            id_partner = request.args.get("id_partner")
+            self.partner_db.delete_partner(id_partner)
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()

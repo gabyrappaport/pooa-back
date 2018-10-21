@@ -121,3 +121,4 @@ venv.bak/
 .idea
 .idea
 itn.db
+nohup.out
