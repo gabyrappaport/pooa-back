@@ -1,9 +1,11 @@
 from Models.ExcelModel import ExcelModel
 
+
 class Product(ExcelModel):
     counter = 0
 
     def __init__(self, id_order, reference, color, meter, price, commission, id_shipment=None, id_product=None):
+        ExcelModel.__init__(self)
         if id_product is None:
             self.__id_product = Product.counter
             Product.counter += 1
@@ -63,3 +65,16 @@ class Product(ExcelModel):
 
     def set_commission(self, commission):
         self.__commission = commission
+
+    def print_to_cell(self, worksheet, cell):
+        worksheet[str(cell[0])] = self.__id_product
+        worksheet[str(cell[1])] = self.__id_order
+        worksheet[str(cell[2])] = self.__reference
+        worksheet[str(cell[3])] = self.__color
+        worksheet[str(cell[4])] = self.__meter
+        worksheet[str(cell[5])] = self.__price
+        worksheet[str(cell[6])] = self.__commission
+        worksheet[str(cell[7])] = self.__id_shipment
+
+    def number_of_product(self):
+        pass

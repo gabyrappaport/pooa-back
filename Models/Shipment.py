@@ -1,10 +1,12 @@
 from Models.ExcelModel import ExcelModel
 
+
 class Shipment(ExcelModel):
     counter = 0
 
     def __init__(self, expedition_date, transportation,
                  departure_location, arrival_location, products=None, id_shipment=None):
+        ExcelModel.__init__(self)
         if id_shipment is None:
             self.__id_shipment = Shipment.counter
             Shipment.counter += 1
@@ -48,3 +50,13 @@ class Shipment(ExcelModel):
 
     def set_products(self, products):
         self.__products = products
+
+    def print_to_cell(self, worksheet, cell):
+        worksheet[str(cell[0])] = self.__id_shipment
+        worksheet[str(cell[1])] = self.__expedition_date
+        worksheet[str(cell[2])] = self.__transportation
+        worksheet[str(cell[3])] = self.__departure_location
+        worksheet[str(cell[4])] = self.__arrival_location
+
+    def number_of_product(self):
+        pass

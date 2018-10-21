@@ -1,11 +1,15 @@
 import datetime
 from Models.ExcelModel import ExcelModel
+from Models.Product import Product
+
 
 class Order(ExcelModel):
     counter = 0
 
     def __init__(self, id_supplier, id_client, expected_delivery_date, payment_type,
-                 l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None, id_order=None, products=None):
+                 l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None,
+                 id_order=None, products=None):
+        ExcelModel.__init__(self)
         if id_order is None:
             self.__id_order = Order.counter
             Order.counter += 1
@@ -95,9 +99,21 @@ class Order(ExcelModel):
     def set_total_amount(self, total_amount):
         self.__total_amount = total_amount
 
-    def print_to_cell(self,worksheet,cell):
-        worksheet[str(cell[0])]=self.__id_order
-        worksheet[str(cell[1])]=self.__supplier
-        worksheet[str(cell[2])]=self.__client
-        worksheet[str(cell[3])]=self.__expected_delivery_date
-        worksheet[str(cell[4])]=self.__payment_type
+    def number_of_product(self):
+        return len(self.__products)
+
+    def print_to_cell(self, worksheet, cell):
+        worksheet[str(cell[0])] = self.__id_order
+        worksheet[str(cell[1])] = self.__supplier
+        worksheet[str(cell[2])] = self.__client
+        worksheet[str(cell[3])] = self.__expected_delivery_date
+        worksheet[str(cell[4])] = self.__payment_type
+        worksheet[str(cell[5])] = self.__l_dips
+        worksheet[str(cell[6])] = self.__appro_ship_sample
+        worksheet[str(cell[7])] = self.__appro_s_off
+        worksheet[str(cell[8])] = self.__ship_sample_2h
+        worksheet[str(cell[9])] = self.__total_amount
+        worksheet[str(cell[10])] = self.__creation_date
+        for p in len(self.__products):
+            iter = 10 + p
+            p.print_to_cell(worksheet,str(cell[iter]))
