@@ -1,4 +1,5 @@
 from enum import Enum
+from flask import render_template, make_response, Response
 
 
 class HttpResponse:
@@ -9,14 +10,12 @@ class HttpResponse:
         self.data = data
 
     def get_response(self):
-        response = {"status": self.http_status.value["status"],
-                    "code": self.http_status.value["code"]}
+        response = {}
         if self.message is not None:
             response["message"] = self.message
         if self.data is not None:
             response["data"] = self.data
-        return response
-
+        return Response(str(response), status=self.http_status.value["code"], mimetype="application/json")
 
 class HttpStatus(Enum):
     OK = {"code": 200, "status": "OK"}

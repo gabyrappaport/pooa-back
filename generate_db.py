@@ -5,6 +5,7 @@ os.remove("itn.db")
 conn = sqlite3.connect("itn.db")
 
 cursor = conn.cursor()
+
 cursor.execute("""CREATE TABLE IF NOT EXISTS 
 Orders(id_order INTEGER PRIMARY KEY UNIQUE,
      id_supplier INTEGER,
@@ -42,6 +43,18 @@ Products(id_product INTEGER PRIMARY KEY UNIQUE,
      price REAL,
      commission REAL)''')
 
+partners = [((1), "client", "Zara"),
+            ((2), "client", "HM"),
+            ((3), "client", "Mango"),
+            ((4), "client", "Kenzo"),
+            ((5), "client", "Etam"),
+            ((6), "supplier", "Mianoutex"),
+            ((7), "supplier", "Hangzhoutex"),
+            ((8), "supplier", "Seoultex"),
+            ((9), "supplier", "Vietnamtex")]
+
+for partner in partners:
+    cursor.execute("INSERT INTO Partners VALUES(?,?,?)", partner)
 
 conn.commit()
 cursor.close()

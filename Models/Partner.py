@@ -1,5 +1,5 @@
 class Partner:
-    counter = 0
+    counter = 10
 
     def __init__(self, partner_type, company, id_partner=None):
         if id_partner is None:
