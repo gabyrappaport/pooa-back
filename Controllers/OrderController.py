@@ -112,7 +112,6 @@ class OrderController(Resource):
             self.order_db.delete_order(id_order)
             products = self.product_db.get_products(id_order)
             for i in products:
-                print(i)
                 self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
