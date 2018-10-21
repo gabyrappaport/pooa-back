@@ -57,7 +57,7 @@ class PartnerController(Resource):
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
-    def delete(self):  # delete by id mais est_ce qu'on connaît l'id ?
+    def delete(self):
         try:
             #data = request.get_json(force=True)
             id_partner = request.args.get("id_partner")
