@@ -114,6 +114,9 @@ class Order(ExcelModel):
         worksheet[str(cell[8])] = self.__ship_sample_2h
         worksheet[str(cell[9])] = self.__total_amount
         worksheet[str(cell[10])] = self.__creation_date
-        for p in len(self.__products):
-            iter = 10 + p
-            p.print_to_cell(worksheet,str(cell[iter]))
+        if self.__products:
+            i = 0
+            for p in self.__products:
+                iter_products = int(11 + i)
+                p.print_to_cell(worksheet, cell[iter_products])
+                i += 1
