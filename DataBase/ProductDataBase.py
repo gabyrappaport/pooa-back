@@ -19,7 +19,7 @@ class ProductDatabase:
                 float(product.get_price()),
                 float(product.get_commission()))
 
-            Database.query(" INSERT INTO Products(id_product,"
+            Database.query("INSERT INTO Products(id_product,"
                            "id_order,"
                            "reference,"
                            "color,"

@@ -108,11 +108,10 @@ class OrderController(Resource):
 
     def delete(self):
         try:
-            data = request.get_json(force=True)
-            self.order_db.delete_order(data["id_order"])
-            products = self.product_db.get_products(data["id_order"])
+            id_order = request.args.get("id_order")
+            self.order_db.delete_order(id_order)
+            products = self.product_db.get_products(id_order)
             for i in products:
-                print(i)
                 self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:

@@ -24,3 +24,5 @@ class Partner:
 
     def set_company(self, company):
         self.__company = company
+
+
