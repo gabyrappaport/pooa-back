@@ -83,4 +83,5 @@ class OrderDataBase:
                 "appro_ship_sample": order[6],
                 "appro_s_off": order[7],
                 "ship_sample_2h": order[8],
-                "total_amount" : order[9]}
+                "total_amount": order[9],
+                "creation_date": order[10]}
