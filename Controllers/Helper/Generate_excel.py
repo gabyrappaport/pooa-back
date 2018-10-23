@@ -8,7 +8,7 @@ class GenerateExcel:
     def __init__(self):
         pass
 
-    def generate_excel(self, order, client, supplier, filename):
+    def generate_excel(self, order, client, supplier, filename,number_of_products):
         wb = load_workbook(app.config["EXCEL_FOLDER"] + '/order_template.xlsx')
         #wb.template = False #To change if we want a real template
         img = Image('public/excels/header_2.png')
@@ -20,7 +20,7 @@ class GenerateExcel:
         cells_client = ['A20', 'A21', 'C12']
         cells_supplier = ['B20', 'B21', 'F9']
         letter_product = ['B', 'K', 'C', 'D', 'F', 'G', 'I', 'J']
-        for i in range(order.number_of_product()):
+        for i in number_of_products:
             row_index = 18 + i
             new_cp = [letter + str(row_index) for letter in letter_product]
             cells_order.append(new_cp)

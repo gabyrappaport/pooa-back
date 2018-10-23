@@ -10,7 +10,6 @@ class Product(ExcelModel):
             self.__id_product = Product.counter
             Product.counter += 1
             print(Product.counter)
-
         else:
             self.__id_product = id_product
         self.__id_order = id_order
@@ -78,6 +77,3 @@ class Product(ExcelModel):
 
     def get_price_per_product(self):
         return self.__price * self.__meter
-
-    def number_of_product(self):
-        pass

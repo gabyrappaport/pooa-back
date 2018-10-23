@@ -99,9 +99,6 @@ class Order(ExcelModel):
     def set_total_amount(self, total_amount):
         self.__total_amount = total_amount
 
-    def number_of_product(self):
-        return len(self.__products)
-
     def get_total_amout_per_order(self):
         if self.__products:
             sum = 0
@@ -112,6 +109,8 @@ class Order(ExcelModel):
         else:
             return "There is no product in this order"
 
+    def get_number_of_products(self):
+        return len(self.__products)
 
     def print_to_cell(self, worksheet, cell):
         #worksheet[str(cell[0])] = self.__id_order

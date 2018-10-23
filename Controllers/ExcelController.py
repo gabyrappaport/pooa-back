@@ -77,7 +77,7 @@ class ExcelController(Resource):
                 filename = "Excel_order_" + str(id_order) + ".xlsx"
                 uploads = os.path.join("public", "excels")
                 excel = GenerateExcel()
-                excel.generate_excel(order, client, supplier, uploads + "/" + filename)
+                excel.generate_excel(order, client, supplier, uploads + "/" + filename, order.get_number_of_products())
                 return send_from_directory(directory=uploads, filename=filename)
 
             else:

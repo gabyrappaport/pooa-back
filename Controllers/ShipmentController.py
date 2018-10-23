@@ -69,8 +69,8 @@ class ShipmentController(Resource):
 
     def delete(self):
         try:
-            data = request.get_json(force=True)
-            self.shipment_db.delete_shipment(data["id_shipment"])
+            id_shipment = request.args.get("id_shipment")
+            self.shipment_db.delete_shipment(id_shipment)
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()

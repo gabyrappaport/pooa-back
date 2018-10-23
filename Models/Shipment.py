@@ -57,6 +57,3 @@ class Shipment(ExcelModel):
         worksheet[str(cell[2])] = self.__transportation
         worksheet[str(cell[3])] = self.__departure_location
         worksheet[str(cell[4])] = self.__arrival_location
-
-    def number_of_product(self):
-        pass
