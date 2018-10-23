@@ -20,7 +20,7 @@ class GenerateExcel:
         cells_client = ['A20', 'A21', 'C12']
         cells_supplier = ['B20', 'B21', 'F9']
         letter_product = ['B', 'K', 'C', 'D', 'F', 'G', 'I', 'J']
-        for i in number_of_products:
+        for i in range(number_of_products):
             row_index = 18 + i
             new_cp = [letter + str(row_index) for letter in letter_product]
             cells_order.append(new_cp)
