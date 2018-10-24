@@ -42,6 +42,13 @@ Products(id_product INTEGER PRIMARY KEY UNIQUE,
      price REAL,
      commission REAL)''')
 
+cursor.execute('''CREATE TABLE IF NOT EXISTS
+Users(id_user INTEGER PRIMARY KEY UNIQUE,
+     name TEXT,
+     surname TEXT,
+     email TEXT,
+     password TEXT,
+     user_type TEXT)''')
 
 conn.commit()
 cursor.close()

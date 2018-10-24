@@ -1,4 +1,3 @@
-import sqlite3
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import *
 
