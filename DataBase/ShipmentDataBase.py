@@ -41,12 +41,16 @@ class ShipmentDataBase:
 
     def add_shipment(self, shipment):
         try:
-            values = (shipment.get_id_shipment(),
-                      shipment.get_expedition_date(),
+            values = (shipment.get_expedition_date(),
                       shipment.get_transportation(),
                       shipment.get_departure_location(),
                       shipment.get_arrival_location())
-            Database.query("INSERT INTO Shipments VALUES (?,?,?,?,?)", values)
+            Database.query("INSERT INTO Shipments "
+                           "(expedition_date,"
+                           "transportation,"
+                           "departure_location,"
+                           "arrival_location)"
+                           "VALUES (?,?,?,?)", values)
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 

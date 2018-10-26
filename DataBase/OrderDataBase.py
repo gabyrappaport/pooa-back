@@ -27,8 +27,7 @@ class OrderDataBase:
 
     def add_order(self, order):
         try:
-            values = (int(order.get_id_order()),
-                      int(order.get_id_supplier()),
+            values = (int(order.get_id_supplier()),
                       int(order.get_id_client()),
                       order.get_expected_delivery_date(),
                       order.get_payment_type(),
@@ -38,7 +37,14 @@ class OrderDataBase:
                       order.get_ship_sample_2h(),
                       order.get_total_amount(),
                       order.get_creation_date())
-            Database.query("INSERT INTO Orders VALUES (?,?,?,?,?,?,?,?,?,?,?)", values)
+            Database.query("INSERT INTO Orders "
+                           "(id_supplier, id_client, expected_delivery_date,"
+                           "payment_type, l_dips, appro_ship_sample, appro_s_off,"
+                           "ship_sample_2h, total_amount, creation_date)"
+                           "VALUES (?,?,?,?,?,?,?,?,?,?)", values)
+            id_order = Database.query("SELECT last_insert_rowid() FROM Orders").fetchone()
+            print("coucou")
+            return id_order[0]
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 

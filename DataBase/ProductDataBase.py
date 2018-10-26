@@ -10,29 +10,27 @@ class ProductDatabase:
     def add_product(self, product):
         """Create a new product with its id, reference, color and its price/meter"""
         try:
-            values = (
-                int(product.get_id_product()),
-                int(product.get_id_order()),
-                str(product.get_reference()),
-                str(product.get_color()),
-                float(product.get_meter()),
-                float(product.get_price()),
-                float(product.get_commission()))
+            values = (int(product.get_id_order()),
+                      str(product.get_reference()),
+                      str(product.get_color()),
+                      float(product.get_meter()),
+                      float(product.get_price()),
+                      float(product.get_commission()))
 
-            Database.query("INSERT INTO Products(id_product,"
-                           "id_order,"
+            Database.query("INSERT INTO Products"
+                           "(id_order,"
                            "reference,"
                            "color,"
                            "meter,"
                            "price,"
                            "commission) "
-                           "VALUES(?,?,?,?,?,?,?) ", values)
+                           "VALUES(?,?,?,?,?,?) ", values)
 
             if product.get_id_shipment():
                 values = (int(product.get_id_shipment()),
                           int(product.get_id_product()))
-                Database.query("UPDATE Products"
-                               " SET id_shipment = ?"
+                Database.query("UPDATE Products "
+                               "SET id_shipment = ?"
                                "WHERE id_product = ?", values)
 
         except (ValueError, TypeError):

@@ -6,11 +6,7 @@ class Partner(ExcelModel):
 
     def __init__(self, partner_type, company, id_partner=None):
         ExcelModel.__init__(self)
-        if id_partner is None:
-            self.__id_partner = Partner.counter
-            Partner.counter += 1
-        else:
-            self.__id_partner = id_partner
+        self.__id_partner = id_partner
         self.__partner_type = partner_type
         self.__company = company
 
@@ -33,6 +29,3 @@ class Partner(ExcelModel):
         # worksheet[str(cell[0])] = self.__id_partner
         # worksheet[str(cell[1])] = self.__partner_type
         worksheet[str(cell[2])] = self.__company
-
-    def number_of_product(self):
-        pass
