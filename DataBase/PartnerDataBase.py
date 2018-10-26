@@ -1,4 +1,3 @@
-import sqlite3
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import *
 
@@ -46,10 +45,9 @@ class PartnerDataBase:
     def add_partner(self, partner):
         """Create a new partner with its company name and partner type : client or supplier"""
         try:
-            values = (int(partner.get_id_partner()),
-                      partner.get_partner_type(),
+            values = (partner.get_partner_type(),
                       partner.get_company())
-            Database.query("INSERT INTO Partners VALUES(?,?,?)", values)
+            Database.query("INSERT INTO Partners (partner_type, company) VALUES(?,?)", values)
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
