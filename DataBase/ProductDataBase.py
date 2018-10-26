@@ -103,7 +103,7 @@ class ProductDatabase:
 
     def delete_id_shipment(self, id_product):
         try:
-            Database.query("UPDATE Products SET id_shipment = null WHERE id_product = ?", (id_product, ))
+            Database.query("UPDATE Products SET id_shipment = null WHERE id_product = ?", (id_product,))
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
@@ -112,7 +112,7 @@ class ProductDatabase:
             query_product_from_ship = Database.query("SELECT id_product FROM Products WHERE id_shipment=?", (id_shipment,))
             result = []
             for row in query_product_from_ship:
-                 result.append(row)
+                result.append(row[0])
             return result
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
