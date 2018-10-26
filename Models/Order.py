@@ -5,16 +5,9 @@ class Order:
     counter = 0
 
     def __init__(self, id_supplier, id_client, expected_delivery_date, payment_type,
-                 l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None, id_order=None, products=None):
-        if id_order is None:
-            self.__id_order = Order.counter
-            Order.counter += 1
-        else:
-            self.__id_order = id_order
-        if creation_date is None:
-            self.__creation_date = datetime.datetime.today().strftime("%d-%m-%Y")
-        else:
-            self.__creation_date = creation_date
+                 l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0,
+                 creation_date=None, products=None, id_order=None):
+        self.__id_order = id_order
         self.__supplier = id_supplier
         self.__client = id_client
         self.__expected_delivery_date = expected_delivery_date
@@ -25,6 +18,10 @@ class Order:
         self.__appro_s_off = appro_s_off
         self.__ship_sample_2h = ship_sample_2h
         self.__total_amount = total_amount
+        if creation_date is None:
+            self.__creation_date = datetime.datetime.today().strftime("%d-%m-%Y")
+        else:
+            self.__creation_date = creation_date
 
     def get_id_order(self):
         return self.__id_order

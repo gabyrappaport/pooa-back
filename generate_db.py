@@ -6,7 +6,7 @@ conn = sqlite3.connect("itn.db")
 
 cursor = conn.cursor()
 cursor.execute("""CREATE TABLE IF NOT EXISTS 
-Orders(id_order INTEGER PRIMARY KEY UNIQUE,
+Orders(id_order INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      id_supplier INTEGER,
      id_client INTEGER,
      expected_delivery_date DATE,
@@ -20,7 +20,7 @@ Orders(id_order INTEGER PRIMARY KEY UNIQUE,
       )""")
 
 cursor.execute("""CREATE TABLE IF NOT EXISTS 
-Shipments(id_shipment INTEGER PRIMARY KEY UNIQUE,
+Shipments(id_shipment INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      expedition_date DATE,
      transportation TEXT,
      departure_location TEXT,
@@ -28,12 +28,12 @@ Shipments(id_shipment INTEGER PRIMARY KEY UNIQUE,
       )""")
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS
-Partners(id_partner INTEGER PRIMARY KEY UNIQUE,
+Partners(id_partner INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      partner_type TEXT,
      company TEXT)''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS
-Products(id_product INTEGER PRIMARY KEY UNIQUE,
+Products(id_product INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      id_order INT,
      id_shipment INT,
      reference TEXT,
@@ -43,7 +43,7 @@ Products(id_product INTEGER PRIMARY KEY UNIQUE,
      commission REAL)''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS
-Users(id_user INTEGER PRIMARY KEY UNIQUE,
+Users(id_user INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      name TEXT,
      surname TEXT,
      email TEXT,

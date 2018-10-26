@@ -3,11 +3,7 @@ class Shipment:
 
     def __init__(self, expedition_date, transportation,
                  departure_location, arrival_location, products=None, id_shipment=None):
-        if id_shipment is None:
-            self.__id_shipment = Shipment.counter
-            Shipment.counter += 1
-        else:
-            self.__id_shipment = id_shipment
+        self.__id_shipment = id_shipment
         self.__expedition_date = expedition_date
         self.__transportation = transportation
         self.__departure_location = departure_location

@@ -1,6 +1,6 @@
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import *
-import hashlib
+
 
 class UserDataBase:
 
@@ -27,13 +27,18 @@ class UserDataBase:
     def add_user(self, user):
         """Create a new user with its info"""
         try:
-            values = (int(user.get_id_user()),
-                      user.get_name(),
+            values = (user.get_name(),
                       user.get_surname(),
                       user.get_email(),
                       user.get_password(),
                       user.get_user_type())
-            Database.query("INSERT INTO Users VALUES(?,?,?,?,?,?)", values)
+            Database.query("INSERT INTO Users"
+                           "(name,"
+                           "surname,"
+                           "email,"
+                           "password,"
+                           "user_type)"
+                           " VALUES(?,?,?,?,?)", values)
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
@@ -64,7 +69,11 @@ class UserDataBase:
                       user.get_password(),
                       user.get_user_type(),
                       user.get_id_user())
-            Database.query("UPDATE Users SET name = ?, surname = ?, email = ?, password = ?, user_type = ? "
+            Database.query("UPDATE Users SET name = ?, "
+                           "surname = ?, "
+                           "email = ?, "
+                           "password = ?, "
+                           "user_type = ? "
                            "WHERE id_user = ? ", values)
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")

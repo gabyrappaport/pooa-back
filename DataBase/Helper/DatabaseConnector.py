@@ -16,6 +16,7 @@ class Database:
         cursor = Database.conn.cursor()
         if value is None:
             query = cursor.execute(sql)
+            #id = cursor.lastrowid
         else:
             query = cursor.execute(sql, value)
         Database.conn.commit()

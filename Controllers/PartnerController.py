@@ -59,7 +59,6 @@ class PartnerController(Resource):
 
     def delete(self):
         try:
-            #data = request.get_json(force=True)
             id_partner = request.args.get("id_partner")
             self.partner_db.delete_partner(id_partner)
             return HttpResponse(HttpStatus.OK).get_response()

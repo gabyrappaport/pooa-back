@@ -46,10 +46,11 @@ class OrderController(Resource):
                           str(data["appro_ship_sample"]),
                           str(data["appro_s_off"]),
                           str(data["ship_sample_2h"]))
+            id_order = self.order_db.add_order(order)
             products = []
             total_amount = 0
             for p in data["products"]:
-                product = Product(int(order.get_id_order()),
+                product = Product(int(id_order),
                                   str(p["reference"]),
                                   str(p["color"]),
                                   float(p["meter"]),
@@ -59,7 +60,6 @@ class OrderController(Resource):
                 self.product_db.add_product(product)
                 total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
             order.set_total_amount(total_amount)
-            self.order_db.add_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -76,6 +76,7 @@ class OrderController(Resource):
                           str(data["appro_s_off"]),
                           str(data["ship_sample_2h"]),
                           id_order=int(data["id_order"]))
+            print(order.get_id_order())
             id_products_keep = []
             total_amount = 0
             for p in data["products"]:

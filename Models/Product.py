@@ -2,12 +2,7 @@ class Product:
     counter = 0
 
     def __init__(self, id_order, reference, color, meter, price, commission, id_shipment=None, id_product=None):
-        if id_product is None:
-            self.__id_product = Product.counter
-            Product.counter += 1
-            print(Product.counter)
-        else:
-            self.__id_product = id_product
+        self.__id_product = id_product
         self.__id_order = id_order
         self.__id_shipment = id_shipment
         self.__reference = reference

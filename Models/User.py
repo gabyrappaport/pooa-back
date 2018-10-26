@@ -2,11 +2,7 @@ class User:
     counter = 0
 
     def __init__(self, name, surname, email, password, user_type, id_user=None):
-        if id_user is None:
-            self.__id_user = User.counter
-            User.counter += 1
-        else:
-            self.__id_user= id_user
+        self.__id_user= id_user
         self.__name = name
         self.__surname = surname
         self.__email = email
