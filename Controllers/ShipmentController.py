@@ -8,12 +8,14 @@ from Controllers.Helper import WritingDataBaseError
 from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.ShipmentDataBase import ShipmentDataBase
 from Models.Shipment import Shipment
+from DataBase.ProductDataBase import ProductDatabase
 
 
 class ShipmentController(Resource):
 
     def __init__(self):
         self.shipment_db = ShipmentDataBase()
+        self.product_db = ProductDatabase()
 
     def get(self):
         # ATTENTION, il faudra pas oublier d'ajouter les products
@@ -44,8 +46,8 @@ class ShipmentController(Resource):
                                 str(data["departure_location"]),
                                 str(data["arrival_location"]))
             self.shipment_db.add_shipment(shipment)
-            # for id_product in data["products"]:
-            # ProductDataBase.indicate_shipment_date(id_product, shipment.get__id_shipment)
+            for id_product in data["products"]:
+                self.product_db.set_id_shipment(id_product, shipment.get_id_shipment)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -59,10 +61,10 @@ class ShipmentController(Resource):
                                 str(data["arrival_location"]),
                                 id_shipment=int(data["id_shipment"]))
             self.shipment_db.update_shipment(shipment)
-            # for id_product in data["added_products"]:
-            # ProductDataBase.indicate_id_shipment(id_product, shipment.get__id_shipment)
-            # for id_product in data["removed_products"]:
-            # ProductDataBase.delete_id_shipment(id_product)
+            for id_product in data["added_products"]:
+                self.product_db.set_id_shipment(id_product, shipment.get_id_shipment)
+            for id_product in data["removed_products"]:
+                self.product_db.delete_id_shipment(id_product)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -71,6 +73,10 @@ class ShipmentController(Resource):
         try:
             id_shipment = request.args.get("id_shipment")
             self.shipment_db.delete_shipment(id_shipment)
+            id_product_to_del = self.product_db.get_id_product_from_shipment(id_shipment)
+            if id_product_to_del:
+                for id_product in id_product_to_del:
+                    self.product_db.delete_id_shipment(id_product)
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
