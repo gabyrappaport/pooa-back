@@ -40,7 +40,7 @@ class OrderController(Resource):
             data = request.get_json(force=True)
             order = Order(int(data["id_supplier"]),
                           int(data["id_client"]),
-                          datetime.datetime.strptime(data["expected_delivery_date"], "%d-%m-%Y").date(),
+                          datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
                           str(data["payment_type"]),
                           str(data["l_dips"]),
                           str(data["appro_ship_sample"]),

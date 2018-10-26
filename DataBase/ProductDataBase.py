@@ -100,9 +100,13 @@ class ProductDatabase:
             raise WritingDataBaseError("Wrong type Value.")
 
     def __list_to_dic_product(self, product):
+        if product[2] is None:
+            id_shipment = -1
+        else:
+            id_shipment = product[2]
         return {"id_product": product[0],
                 "id_order": product[1],
-                "id_shipment": product[2],
+                "id_shipment":id_shipment,
                 "reference": product[3],
                 "color": product[4],
                 "meter": product[5],

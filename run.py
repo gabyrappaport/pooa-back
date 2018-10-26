@@ -12,6 +12,8 @@ def create_app():
         "Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
          supports_credentials=True)
 
+    app.config.from_pyfile("configs/config.cfg")
+
     return app
 
 

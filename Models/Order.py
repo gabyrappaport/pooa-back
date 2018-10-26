@@ -1,12 +1,15 @@
 import datetime
+from Models.ExcelModel import ExcelModel
+from Models.Product import Product
 
 
-class Order:
+class Order(ExcelModel):
     counter = 0
 
     def __init__(self, id_supplier, id_client, expected_delivery_date, payment_type,
-                 l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0,
-                 creation_date=None, products=None, id_order=None):
+                 l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None,
+                 id_order=None, products=None):
+        ExcelModel.__init__(self)
         self.__id_order = id_order
         self.__supplier = id_supplier
         self.__client = id_client
@@ -91,3 +94,35 @@ class Order:
 
     def set_total_amount(self, total_amount):
         self.__total_amount = total_amount
+
+    def get_total_amout_per_order(self):
+        if self.__products:
+            sum = 0
+            for p in self.__products:
+                price = p.get_price_per_product()
+                sum += price
+            return sum
+        else:
+            return "There is no product in this order"
+
+    def get_number_of_products(self):
+        return len(self.__products)
+
+    def print_to_cell(self, worksheet, cell):
+        #worksheet[str(cell[0])] = self.__id_order
+        worksheet[str(cell[1])] = self.get_total_amout_per_order()
+        worksheet[str(cell[2])] = self.get_total_amout_per_order()
+        worksheet[str(cell[3])] = self.__expected_delivery_date
+        worksheet[str(cell[4])] = self.__payment_type
+        worksheet[str(cell[5])] = self.__l_dips
+        worksheet[str(cell[6])] = self.__appro_ship_sample
+        worksheet[str(cell[7])] = self.__appro_s_off
+        worksheet[str(cell[8])] = self.__ship_sample_2h
+        # worksheet[str(cell[9])] = self.__total_amount
+        worksheet[str(cell[10])] = self.__creation_date
+        if self.__products:
+            i = 0
+            for p in self.__products:
+                iter_products = int(11 + i)
+                p.print_to_cell(worksheet, cell[iter_products])
+                i += 1
