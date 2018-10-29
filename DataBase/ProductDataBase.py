@@ -16,7 +16,6 @@ class ProductDatabase:
                       float(product.get_meter()),
                       float(product.get_price()),
                       float(product.get_commission()))
-
             Database.query("INSERT INTO Products"
                            "(id_order,"
                            "reference,"
@@ -25,23 +24,23 @@ class ProductDatabase:
                            "price,"
                            "commission) "
                            "VALUES(?,?,?,?,?,?) ", values)
-
+            id_product = Database.query("SELECT last_insert_rowid() FROM Products").fetchone()
             if product.get_id_shipment():
                 values = (int(product.get_id_shipment()),
-                          int(product.get_id_product()))
+                          id_product)
                 Database.query("UPDATE Products "
                                "SET id_shipment = ?"
                                "WHERE id_product = ?", values)
-
+            return id_product[0]
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
     def delete_product(self, id_product):
-        """Delete a product with its reference"""
+        """Delete a product with its id"""
         Database.query("DELETE FROM Products WHERE id_product = ?", (id_product,))
 
     def delete_old_products(self, id_order, id_products_keep):
-        """Delete the products that need to be delete during the update of an order"""
+        """Delete the products that need to be deleted during the update of an order"""
         if len(id_products_keep) == 1:
             sql = "DELETE FROM Products WHERE id_order = ? AND id_product  != ?"
             values = (id_order, id_products_keep[0])
@@ -94,8 +93,11 @@ class ProductDatabase:
             raise WritingDataBaseError("Wrong type Value.")
 
     def set_id_shipment(self, id_product, id_shipment):
+        """Set id_shipment in database"""
         try:
-            Database.query("UPDATE Products SET id_shipment = ? WHERE id_product = ?", (id_shipment, id_product))
+            Database.query("UPDATE Products "
+                           "SET id_shipment = ? "
+                           "WHERE id_product = ?", (id_shipment, id_product))
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
@@ -106,7 +108,7 @@ class ProductDatabase:
             id_shipment = product[2]
         return {"id_product": product[0],
                 "id_order": product[1],
-                "id_shipment":id_shipment,
+                "id_shipment": id_shipment,
                 "reference": product[3],
                 "color": product[4],
                 "meter": product[5],
