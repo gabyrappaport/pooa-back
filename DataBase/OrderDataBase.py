@@ -9,7 +9,7 @@ class OrderDataBase:
         pass
 
     def get_all_orders(self):
-        query = Database.query("SELECT * FROM Orders")
+        query = Database.query("SELECT * FROM Orders ORDER BY creation_date DESC")
         result = []
         for row in query:
             order = self.__list_to_dic_order(row)

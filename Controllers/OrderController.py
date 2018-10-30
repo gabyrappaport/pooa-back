@@ -59,7 +59,7 @@ class OrderController(Resource):
                 products.append(product)
                 self.product_db.add_product(product)
                 total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
-            order.set_total_amount(total_amount)
+            order.set_total_amount(total_amount.__round__(2))
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()

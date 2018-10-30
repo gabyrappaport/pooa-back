@@ -4,7 +4,6 @@ from Models.Product import Product
 
 
 class Order(ExcelModel):
-    counter = 0
 
     def __init__(self, id_supplier, id_client, expected_delivery_date, payment_type,
                  l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None,
@@ -25,6 +24,28 @@ class Order(ExcelModel):
             self.__creation_date = datetime.datetime.today().strftime("%d-%m-%Y")
         else:
             self.__creation_date = creation_date
+
+    def get_number_of_products(self):
+        return len(self.__products)
+
+    def print_to_cell(self, worksheet, cell):
+        #worksheet[str(cell[0])] = self.__id_order
+        worksheet[str(cell[1])] = self.get_total_amout_per_order()
+        worksheet[str(cell[2])] = self.get_total_amout_per_order()
+        worksheet[str(cell[3])] = self.__expected_delivery_date
+        worksheet[str(cell[4])] = self.__payment_type
+        worksheet[str(cell[5])] = self.__l_dips
+        worksheet[str(cell[6])] = self.__appro_ship_sample
+        worksheet[str(cell[7])] = self.__appro_s_off
+        worksheet[str(cell[8])] = self.__ship_sample_2h
+        # worksheet[str(cell[9])] = self.__total_amount
+        worksheet[str(cell[10])] = self.__creation_date
+        if self.__products:
+            i = 0
+            for p in self.__products:
+                iter_products = int(11 + i)
+                p.print_to_cell(worksheet, cell[iter_products])
+                i += 1
 
     def get_id_order(self):
         return self.__id_order
@@ -105,24 +126,4 @@ class Order(ExcelModel):
         else:
             return "There is no product in this order"
 
-    def get_number_of_products(self):
-        return len(self.__products)
 
-    def print_to_cell(self, worksheet, cell):
-        #worksheet[str(cell[0])] = self.__id_order
-        worksheet[str(cell[1])] = self.get_total_amout_per_order()
-        worksheet[str(cell[2])] = self.get_total_amout_per_order()
-        worksheet[str(cell[3])] = self.__expected_delivery_date
-        worksheet[str(cell[4])] = self.__payment_type
-        worksheet[str(cell[5])] = self.__l_dips
-        worksheet[str(cell[6])] = self.__appro_ship_sample
-        worksheet[str(cell[7])] = self.__appro_s_off
-        worksheet[str(cell[8])] = self.__ship_sample_2h
-        # worksheet[str(cell[9])] = self.__total_amount
-        worksheet[str(cell[10])] = self.__creation_date
-        if self.__products:
-            i = 0
-            for p in self.__products:
-                iter_products = int(11 + i)
-                p.print_to_cell(worksheet, cell[iter_products])
-                i += 1
