@@ -1,0 +1,13 @@
+aniso8601==4.0.1
+et-xmlfile==1.0.1
+Flask==1.0.2
+Flask-Cors==3.0.6
+Flask-RESTful==0.3.6
+itsdangerous==1.1.0
+jdcal==1.4
+Jinja2==2.10
+MarkupSafe==1.0
+openpyxl==2.5.9
+pytz==2018.7
+six==1.11.0
+Werkzeug==0.14.1

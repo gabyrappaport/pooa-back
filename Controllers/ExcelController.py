@@ -1,4 +1,3 @@
-import datetime
 import os
 import werkzeug
 from flask import request, send_from_directory
@@ -54,7 +53,7 @@ class ExcelController(Resource):
                                       float(p["commission"]),
                                       #id_shipment=int(p["id_shipment"]),
                                       id_product=p["id_product"])
-                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
+                    total_amount += float(p["commission"])/100 * float(p["price"]) * float(p["meter"])
                     products.append(product)
                 order.set_products(products)
                 order.set_total_amount(total_amount) # NOTRE TOTAL AMOUNT EST DEJA DANS LA BDD

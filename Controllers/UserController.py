@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request, session
+from flask import request
 
 import hashlib
 import werkzeug

@@ -16,6 +16,7 @@ class ShipmentController(Resource):
         self.shipment_db = ShipmentDataBase()
 
     def get(self):
+        """Using Resource forces us to create REST APIs with only one GET"""
         # ATTENTION, il faudra pas oublier d'ajouter les products
         try:
             if request.args.get("expedition_date"):

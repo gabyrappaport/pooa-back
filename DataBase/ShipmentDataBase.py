@@ -8,6 +8,7 @@ class ShipmentDataBase:
         pass
 
     def get_shipments_expedition_date(self, expedition_date):
+        """Get all shipments with the same expedition date"""
         query = Database.query("SELECT * FROM Shipments WHERE expedition_date=?", (expedition_date,))
         result = []
         for row in query:
@@ -16,6 +17,7 @@ class ShipmentDataBase:
         return result
 
     def get_shipments_id_order(self, id_order):
+        """Get shipments info of an order with its id"""
         query = Database.query("SELECT * FROM Shipments WHERE id_shipment IN "
                                "(SELECT DISTINCT id_shipment FROM Products WHERE id_order=?)", (id_order,))
         result = []
@@ -25,6 +27,7 @@ class ShipmentDataBase:
         return result
 
     def get_shipment_id_shipment(self, id_shipment):
+        """Get shipment info with its id"""
         query_shipment = Database.query("SELECT * FROM Shipments WHERE id_shipment = ?",
                                         (id_shipment,))
         shipment = query_shipment.fetchone()
@@ -32,6 +35,7 @@ class ShipmentDataBase:
         return result
 
     def get_all_shipments(self):
+        """Get all shipments"""
         query = Database.query("SELECT * FROM Shipments")
         result = []
         for row in query:
@@ -71,6 +75,7 @@ class ShipmentDataBase:
             raise WritingDataBaseError("Wrong type Value.")
 
     def delete_shipment(self, id_shipment):
+        """Delete shipment with its id"""
         Database.query("DELETE from Shipments "
                        "WHERE id_shipment = ?", (id_shipment,))
 

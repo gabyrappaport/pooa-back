@@ -16,7 +16,6 @@ class LoginController(Resource):
         email = str(data["email"])
         password = str(data["password"])
         password_hash = hashlib.sha256(str(password).encode("utf-8")).hexdigest()
-        print(self.user_db.check_user(email, password_hash))
         if not self.user_db.check_user(email, password_hash):
             #session['email'] = None
             return HttpResponse(HttpStatus.Unauthorized).get_response()
