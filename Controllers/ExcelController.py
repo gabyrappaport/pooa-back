@@ -65,19 +65,10 @@ class ExcelController(Resource):
                 supplier = Partner(str(supplier_db["partner_type"]),
                                    str(supplier_db["company"]),
                                    id_partner=int(supplier_db["id_partner"]))
-                # If we need shipment information
-                #shipment_db = self.shipment_db.get_shipments_id_order(id_order)
-                #shipment_obj = Shipment(shipment_db["expedition_date"],
-                #                        shipment_db["transportation"],
-                #                        shipment_db["departure_location"],
-                #                        shipment_db["arrival_location"],
-                #                        products=shipment_db["products"],
-                #                        id_shipment=shipment_db["id_shipment"])
                 filename = "Excel_order_" + str(id_order) + ".xlsx"
                 uploads = os.path.join("public", "excels")
                 excel = GenerateExcel()
                 excel.generate_excel(order, client, supplier, uploads + "/" + filename, order.get_number_of_products())
                 return send_from_directory(directory=uploads, filename=filename)
-
             else:
                 raise NotImplementedError("error, please type a valid id_order")

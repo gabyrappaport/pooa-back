@@ -2,7 +2,6 @@ from Models.ExcelModel import ExcelModel
 
 
 class Partner(ExcelModel):
-    counter = 0
 
     def __init__(self, partner_type, company, id_partner=None):
         ExcelModel.__init__(self)
