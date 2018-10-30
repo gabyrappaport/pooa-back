@@ -10,7 +10,6 @@ class GenerateExcel:
 
     def generate_excel(self, order, client, supplier, filename,number_of_products):
         wb = load_workbook(app.config["EXCEL_FOLDER"] + '/order_template.xlsx')
-        #wb.template = False #To change if we want a real template
         img = Image('public/excels/header_2.png')
         img.width = 563
         img.height = 110
@@ -24,10 +23,8 @@ class GenerateExcel:
             row_index = 18 + i
             new_cp = [letter + str(row_index) for letter in letter_product]
             cells_order.append(new_cp)
-        #cells_shipment=['E1','E2','E3','E4','E5']
         ws.add_image(img, 'B2')
         client.print_to_cell(ws, cells_client)
         order.print_to_cell(ws, cells_order)
         supplier.print_to_cell(ws, cells_supplier)
-        #shipment.print_to_cell(ws, cells_shipment)
         wb.save(filename)
