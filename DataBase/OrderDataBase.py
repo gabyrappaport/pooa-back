@@ -1,4 +1,3 @@
-import sqlite3
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import WritingDataBaseError
 
@@ -72,6 +71,14 @@ class OrderDataBase:
                            "ship_sample_2h = ?,"
                            "total_amount = ?"
                            "WHERE id_order = ?", values)
+        except (ValueError, TypeError):
+            raise WritingDataBaseError("Wrong type Value.")
+
+    def set_total_amount(self, total_amount, id_order):
+        try:
+            Database.query("UPDATE Orders "
+                           "SET total_amount = ?"
+                           "WHERE id_order = ?", (total_amount, id_order))
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
