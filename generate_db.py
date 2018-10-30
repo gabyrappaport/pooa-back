@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-os.remove("itn.db")
+os.remove("itn.db")  # à enlever
 conn = sqlite3.connect("itn.db")
 
 cursor = conn.cursor()
