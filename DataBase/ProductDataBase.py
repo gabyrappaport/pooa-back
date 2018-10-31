@@ -62,6 +62,17 @@ class ProductDatabase:
             result.append(product)
         return result
 
+    def get_products_from_id_shipment(self, id_shipment):
+        try:
+            query_product_from_ship = Database.query("SELECT * FROM Products WHERE id_shipment=?", (id_shipment,))
+            result = []
+            for row in query_product_from_ship:
+                product = self.__list_to_dic_product(row)
+                result.append(product)
+            return result
+        except(ValueError, TypeError):
+            raise WritingDataBaseError("Wrong type Value.")
+
     def update_product(self, product):
         try:
             values = (int(product.get_id_order()),

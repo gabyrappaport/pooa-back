@@ -19,18 +19,27 @@ class ShipmentController(Resource):
 
     def get(self):
         """Using Resource forces us to create REST APIs with only one GET"""
-        # ATTENTION, il faudra pas oublier d'ajouter les products
         try:
             if request.args.get("expedition_date"):
                 shipments = self.shipment_db.get_shipments_expedition_date(request.args.get("expedition_date"))
-                return HttpResponse(HttpStatus.OK,
-                                    data=shipments).get_response()
+
             elif request.args.get("id_order"):
                 shipments = self.shipment_db.get_shipments_id_order(request.args.get("id_order"))
-                return HttpResponse(HttpStatus.OK,
-                                    data=shipments).get_response()
+
             elif request.args.get("id_shipment"):
                 shipments = self.shipment_db.get_shipment_id_shipment(request.args.get("id_shipment"))
+
+            if len(shipments) > 1:
+                shipments_list = []
+                for shipment in shipments:
+                    list_product = self.product_db.get_products_from_id_shipment(shipment['id_shipment'])
+                    shipment["products"] = list_product
+                    shipments_list.append(shipment)
+                return HttpResponse(HttpStatus.OK,
+                                    data=shipments_list).get_response()
+            elif len(shipments) == 1:
+                list_product = self.product_db.get_products_from_id_shipment(shipments[0]['id_shipment'])
+                shipments[0]['products'] = list_product
                 return HttpResponse(HttpStatus.OK,
                                     data=shipments).get_response()
             else:
