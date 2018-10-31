@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 
 
@@ -19,4 +19,11 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
+
+
+    @app.route("/")
+    def hello():
+        return render_template('index.html')
+
+
     app.run(debug=True)

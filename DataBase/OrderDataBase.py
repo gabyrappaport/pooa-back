@@ -8,6 +8,7 @@ class OrderDataBase:
         pass
 
     def get_all_orders(self):
+        """Get all orders info"""
         query = Database.query("SELECT * FROM Orders ORDER BY creation_date DESC")
         result = []
         for row in query:
@@ -16,6 +17,7 @@ class OrderDataBase:
         return result
 
     def get_order(self, id_order):
+        """Get order info with its id"""
         query_order = Database.query("SELECT * FROM Orders WHERE id_order = ?",
                                      (id_order,))
         order = query_order.fetchone()
@@ -25,6 +27,7 @@ class OrderDataBase:
             return order
 
     def add_order(self, order):
+        """Create a new order and return its id which is autoincremented in database"""
         try:
             values = (int(order.get_id_supplier()),
                       int(order.get_id_client()),
@@ -42,7 +45,6 @@ class OrderDataBase:
                            "ship_sample_2h, total_amount, creation_date)"
                            "VALUES (?,?,?,?,?,?,?,?,?,?)", values)
             id_order = Database.query("SELECT last_insert_rowid() FROM Orders").fetchone()
-            print("coucou")
             return id_order[0]
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
@@ -59,7 +61,6 @@ class OrderDataBase:
                       order.get_ship_sample_2h(),
                       order.get_total_amount(),
                       int(order.get_id_order()))
-
             Database.query("UPDATE Orders "
                            "SET id_supplier = ?,"
                            "id_client = ?,"
@@ -75,6 +76,7 @@ class OrderDataBase:
             raise WritingDataBaseError("Wrong type Value.")
 
     def set_total_amount(self, total_amount, id_order):
+        """Set total_amount in database"""
         try:
             Database.query("UPDATE Orders "
                            "SET total_amount = ?"
@@ -83,6 +85,7 @@ class OrderDataBase:
             raise WritingDataBaseError("Wrong type Value.")
 
     def delete_order(self, id_order):
+        """Delete order with its id"""
         Database.query("DELETE from Orders "
                        "WHERE id_order = ?", (id_order,))
 

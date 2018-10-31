@@ -14,22 +14,28 @@ class PartnerController(Resource):
         self.partner_db = PartnerDataBase()
 
     def get(self):
+        """Using Resource forces us to create REST APIs with only one GET"""
         try:
+            # Get one partner with its id
             if request.args.get("id_partner"):
                 id_partner = request.args.get("id_partner")
                 partner = self.partner_db.get_partner(id_partner)
                 return HttpResponse(HttpStatus.OK,
                                     data=partner).get_response()
+            # Get all partners with type (client or supplier)
             elif request.args.get("partner_type"):
                 partner_type = request.args.get("partner_type")
+                # Get suppliers
                 if partner_type == "supplier":
                     suppliers = self.partner_db.get_suppliers()
                     return HttpResponse(HttpStatus.OK,
                                         data=suppliers).get_response()
+                # Get clients
                 elif partner_type == "client":
                     clients = self.partner_db.get_clients()
                     return HttpResponse(HttpStatus.OK,
                                         data=clients).get_response()
+            # Get all partners
             else:
                 return HttpResponse(HttpStatus.OK,
                                     data=self.partner_db.get_all_partners()).get_response()
