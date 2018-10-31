@@ -37,9 +37,9 @@ class ExcelController(Resource):
                 order_db["products"] = self.product_db.get_products(id_order)
                 products = []
                 # We create a Product object thanks to information in order_db
-                for p in order_db["products"]: == == == =
-                product, amount_product = ExcelController.__get_info_product(self, id_order, p)
-                total_amount += amount_product
+                for p in order_db["products"]:
+                    product, amount_product = ExcelController.__get_info_product(self, id_order, p)
+                    total_amount += amount_product
                 products.append(product)
             # We update this information on the order project
             order.set_products(products)
