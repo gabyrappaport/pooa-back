@@ -1,3 +1,4 @@
+import datetime
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import WritingDataBaseError
 
@@ -84,6 +85,24 @@ class OrderDataBase:
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
+    def partner_income(self, month):
+        """Give the income from every partner in the month"""
+        try:
+            query_income = Database.query("SELECT id_partner, partner_type, SUM(total_amount) "
+                                          "FROM Orders, Partners "
+                                          "WHERE Orders.id_supplier = Partners.id_partner "
+                                          "AND strftime('%m', creation_date) = ?"
+                                          "GROUP BY id_partner, partner_type",
+                                          (str(month),))
+            result = []
+            for row in query_income:
+                income = self.__list_to_dic_income(row)
+                result.append(income)
+            print(result)
+            return result
+        except (ValueError, TypeError):
+            raise WritingDataBaseError("Wrong type Value.")
+
     def delete_order(self, id_order):
         """Delete order with its id"""
         Database.query("DELETE from Orders "
@@ -101,3 +120,8 @@ class OrderDataBase:
                 "ship_sample_2h": order[8],
                 "total_amount": order[9],
                 "creation_date": order[10]}
+
+    def __list_to_dic_income(self, income):
+        return {"id_order": income[0],
+                "partner_type": income[1],
+                "income": income[2]}
