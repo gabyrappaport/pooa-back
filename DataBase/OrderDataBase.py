@@ -85,10 +85,10 @@ class OrderDataBase:
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
-    def partner_income(self, month):
-        """Give the income from every partner in the month"""
+    def supplier_income(self, month):
+        """Give the income from every supplier in the month"""
         try:
-            query_income = Database.query("SELECT id_partner, partner_type, SUM(total_amount) "
+            query_income = Database.query("SELECT id_supplier, partner_type, SUM(total_amount) "
                                           "FROM Orders, Partners "
                                           "WHERE Orders.id_supplier = Partners.id_partner "
                                           "AND strftime('%m', creation_date) = ?"
@@ -98,7 +98,23 @@ class OrderDataBase:
             for row in query_income:
                 income = self.__list_to_dic_income(row)
                 result.append(income)
-            print(result)
+            return result
+        except (ValueError, TypeError):
+            raise WritingDataBaseError("Wrong type Value.")
+
+    def client_income(self, month):
+        """Give the income from every client in the month"""
+        try:
+            query_income = Database.query("SELECT id_client, partner_type, SUM(total_amount) "
+                                          "FROM Orders, Partners "
+                                          "WHERE Orders.id_client = Partners.id_partner "
+                                          "AND strftime('%m', creation_date) = ?"
+                                          "GROUP BY id_partner, partner_type",
+                                          (str(month),))
+            result = []
+            for row in query_income:
+                income = self.__list_to_dic_income(row)
+                result.append(income)
             return result
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
@@ -122,6 +138,6 @@ class OrderDataBase:
                 "creation_date": order[10]}
 
     def __list_to_dic_income(self, income):
-        return {"id_order": income[0],
+        return {"id_partner": income[0],
                 "partner_type": income[1],
                 "income": income[2]}
