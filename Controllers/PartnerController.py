@@ -7,6 +7,18 @@ from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.PartnerDataBase import PartnerDataBase
 from Models.Partner import Partner
 
+""" REST API for Partners. 
+
+Note 1 :
+We are using flask_restful, which forces us to create only one of each HTTP Methods,
+Thus, we have only one public GET which calls several private ones.
+ 
+Note 2 : 
+The project aims to be more consistent and longer, especially for the front.
+This is why some HTTP Methods are not yet called by the front, like DELETE or PUT,
+but are still necessary and fully working.
+"""
+
 
 class PartnerController(Resource):
 

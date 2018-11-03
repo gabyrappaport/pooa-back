@@ -88,6 +88,7 @@ class PartnerDataBase:
         return result
 
     def get_all_partners(self):
+        """Get all partners, clients and suppliers"""
         query_partners = Database.query("SELECT * FROM Partners ")
         result = []
         for row in query_partners:

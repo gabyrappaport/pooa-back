@@ -8,6 +8,18 @@ from DataBase.ProductDataBase import ProductDatabase
 from Models.Order import *
 from Models.Product import Product
 
+""" REST API for Orders. 
+
+Note 1 :
+We are using flask_restful, which forces us to create only one of each HTTP Methods,
+Thus, we have only one public GET which calls several private ones.
+ 
+Note 2 : 
+The project aims to be more consistent and longer, especially for the front.
+This is why some HTTP Methods are not yet called by the front, like DELETE or PUT,
+but are still necessary and fully working.
+ """
+
 
 class OrderController(Resource):
 
@@ -17,6 +29,7 @@ class OrderController(Resource):
 
     def get(self):
         try:
+            # Get one order with its id
             if request.args.get("id_order"):
                 id_order = request.args.get("id_order")
                 order = self.order_db.get_order(id_order)
@@ -24,6 +37,7 @@ class OrderController(Resource):
                     order["products"] = self.product_db.get_products(id_order)
                 return HttpResponse(HttpStatus.OK,
                                     data=order).get_response()
+            # Get all orders
             else:
                 orders = self.order_db.get_all_orders()
                 for order in orders:
@@ -35,6 +49,7 @@ class OrderController(Resource):
 
     def post(self):
         try:
+            # Create new order
             data = request.get_json(force=True)
             order = Order(int(data["id_supplier"]),
                           int(data["id_client"]),
@@ -45,6 +60,7 @@ class OrderController(Resource):
                           str(data["appro_s_off"]),
                           str(data["ship_sample_2h"]))
             id_order = self.order_db.add_order(order)
+            # Add products in new order and calculate total amount
             products = []
             total_amount = 0
             for p in data["products"]:
@@ -56,7 +72,7 @@ class OrderController(Resource):
                                   float(p["commission"]))
                 products.append(product)
                 self.product_db.add_product(product)
-                total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
+                total_amount += float(p["commission"]) / 100 * float(p["price"]) * float(p["meter"])
             order.set_total_amount(total_amount.__round__(2))
             self.order_db.set_total_amount(total_amount.__round__(2), id_order)
             return HttpResponse(HttpStatus.OK).get_response()
@@ -65,6 +81,7 @@ class OrderController(Resource):
 
     def put(self):
         try:
+            # Update order
             data = request.get_json(force=True)
             order = Order(int(data["supplier"]),
                           int(data["client"]),
@@ -79,9 +96,11 @@ class OrderController(Resource):
                 order.set_complete_payment_date(data["complete_payment_date"])
             if "complete_delivery_date" in data.keys():
                 order.set_complete_delivery_date(data["complete_delivery_date"])
+            # Update products in order and new total amount
             id_products_keep = []
             total_amount = 0
             for p in data["products"]:
+                # If existing products are in updated order
                 if "id_product" in p.keys():
                     product = Product(int(order.get_id_order()),
                                       str(p["reference"]),
@@ -90,8 +109,9 @@ class OrderController(Resource):
                                       float(p["price"]),
                                       float(p["commission"]),
                                       id_product=int(p["id_product"]))
-                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
+                    total_amount += float(p["commission"]) / 100 * float(p["price"]) * float(p["meter"])
                     self.product_db.update_product(product)
+                # If new products are in updated order, we add them and delete the old ones
                 else:
                     product = Product(int(order.get_id_order()),
                                       str(p["reference"]),
@@ -99,7 +119,7 @@ class OrderController(Resource):
                                       float(p["meter"]),
                                       float(p["price"]),
                                       float(p["commission"]))
-                    total_amount += float(p["commission"]) * float(p["price"]) * float(p["meter"])
+                    total_amount += float(p["commission"]) / 100 * float(p["price"]) * float(p["meter"])
                     id_product = self.product_db.add_product(product)
                     id_products_keep.append(id_product)
             order.set_total_amount(total_amount.__round__(2))
@@ -114,6 +134,7 @@ class OrderController(Resource):
             id_order = request.args.get("id_order")
             self.order_db.delete_order(id_order)
             products = self.product_db.get_products(id_order)
+            # Delete products that are in the order deleted
             for i in products:
                 self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
