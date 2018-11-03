@@ -1,17 +1,17 @@
 import os
-import werkzeug
+
 from flask import request, send_from_directory
 from flask_restful import Resource
 
-from DataBase.OrderDataBase import *
-from DataBase.ProductDataBase import ProductDatabase
-from DataBase.PartnerDataBase import PartnerDataBase
-from DataBase.ShipmentDataBase import ShipmentDataBase
-from Models.Order import *
-from Models.Product import Product
-from Models.Partner import Partner
 # from Models.Shipment import Shipment
 from Controllers.Helper.Generate_excel import GenerateExcel
+from DataBase.OrderDataBase import *
+from DataBase.PartnerDataBase import PartnerDataBase
+from DataBase.ProductDataBase import ProductDatabase
+from DataBase.ShipmentDataBase import ShipmentDataBase
+from Models.Order import *
+from Models.Partner import Partner
+from Models.Product import Product
 
 
 class ExcelController(Resource):
@@ -66,41 +66,38 @@ class ExcelController(Resource):
         else:
             raise NotImplementedError("error, please type a valid id_order")
 
+    def __get_order_info(self, id_order, order_db):
+        """We create an Order object thanks information in the database"""
+        if order_db is not None:
+            order = Order(int(order_db["supplier"]),
+                          int(order_db["client"]),
+                          str(order_db["expected_delivery_date"]),
+                          str(order_db["payment_type"]),
+                          str(order_db["l_dips"]),
+                          str(order_db["appro_ship_sample"]),
+                          str(order_db["appro_s_off"]),
+                          str(order_db["ship_sample_2h"]),
+                          total_amount=str(order_db["total_amount"]),
+                          creation_date=(order_db["creation_date"]),
+                          id_order=int(order_db["id_order"])
+                          )
+        return order
 
-def __get_order_info(self, id_order, order_db):
-    """We create an Order object thanks information in the database"""
-    if order_db is not None:
-        order = Order(int(order_db["supplier"]),
-                      int(order_db["client"]),
-                      str(order_db["expected_delivery_date"]),
-                      str(order_db["payment_type"]),
-                      str(order_db["l_dips"]),
-                      str(order_db["appro_ship_sample"]),
-                      str(order_db["appro_s_off"]),
-                      str(order_db["ship_sample_2h"]),
-                      total_amount=str(order_db["total_amount"]),
-                      creation_date=(order_db["creation_date"]),
-                      id_order=int(order_db["id_order"])
-                      )
-    return order
+    def __get_info_product(self, id_order, p):
+        total_amount = 0
+        product = Product(int(id_order),
+                          str(p["reference"]),
+                          str(p["color"]),
+                          float(p["meter"]),
+                          float(p["price"]),
+                          float(p["commission"]),
+                          id_product=p["id_product"])
+        # We compute the total amount of each product that we want to display on the excel file
+        total_amount += float(p["price"]) * float(p["meter"])
 
+        return product, total_amount
 
-def __get_info_product(self, id_order, p):
-    total_amount = 0
-    product = Product(int(id_order),
-                      str(p["reference"]),
-                      str(p["color"]),
-                      float(p["meter"]),
-                      float(p["price"]),
-                      float(p["commission"]),
-                      id_product=p["id_product"])
-    # We compute the total amount of each product that we want to display on the excel file
-    total_amount += float(p["price"]) * float(p["meter"])
-
-    return product, total_amount
-
-
-def __get_partner_info(self, partner_db):
-    partner = Partner(str(partner_db["partner_type"]),
-                      str(partner_db["company"]), id_partner=int(partner_db["id_partner"]))
-    return partner
+    def __get_partner_info(self, partner_db):
+        partner = Partner(str(partner_db["partner_type"]),
+                          str(partner_db["company"]), id_partner=int(partner_db["id_partner"]))
+        return partner

@@ -23,7 +23,7 @@ class Order(ExcelModel):
         self.__complete_delivery_date = complete_delivery_date
         self.__complete_payment_date = complete_payment_date
         if creation_date is None:
-            self.__creation_date = datetime.datetime.today().strftime("%d-%m-%Y")
+            self.__creation_date = datetime.datetime.today().strftime("%Y-%m-%d")
         else:
             self.__creation_date = creation_date
 
