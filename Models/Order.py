@@ -41,7 +41,6 @@ class Order(ExcelModel):
             return "There is no product in this order"
 
     def print_to_cell(self, worksheet, cell):
-        # worksheet[str(cell[0])] = self.__id_order
         worksheet[str(cell[1])] = self.get_total_amout_per_order()
         worksheet[str(cell[2])] = self.get_total_amout_per_order()
         worksheet[str(cell[3])] = self.__expected_delivery_date
@@ -50,7 +49,6 @@ class Order(ExcelModel):
         worksheet[str(cell[6])] = self.__appro_ship_sample
         worksheet[str(cell[7])] = self.__appro_s_off
         worksheet[str(cell[8])] = self.__ship_sample_2h
-        # worksheet[str(cell[9])] = self.__total_amount
         worksheet[str(cell[10])] = self.__creation_date
         if self.__products:
             i = 0
