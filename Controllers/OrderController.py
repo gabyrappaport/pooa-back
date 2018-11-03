@@ -1,5 +1,3 @@
-import datetime
-
 import werkzeug
 from flask import request
 from flask_restful import Resource
@@ -77,7 +75,10 @@ class OrderController(Resource):
                           str(data["appro_s_off"]),
                           str(data["ship_sample_2h"]),
                           id_order=int(data["id_order"]))
-            print(order.get_id_order())
+            if "complete_payment_date" in data.keys():
+                order.set_complete_payment_date(data["complete_payment_date"])
+            if "complete_delivery_date" in data.keys():
+                order.set_complete_delivery_date(data["complete_delivery_date"])
             id_products_keep = []
             total_amount = 0
             for p in data["products"]:
@@ -103,7 +104,6 @@ class OrderController(Resource):
                     id_products_keep.append(id_product)
             order.set_total_amount(total_amount.__round__(2))
             self.order_db.update_order(order)
-            print(id_products_keep)
             self.product_db.delete_old_products(order.get_id_order(), id_products_keep)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:

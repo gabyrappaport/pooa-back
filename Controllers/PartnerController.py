@@ -16,25 +16,48 @@ class PartnerController(Resource):
     def get(self):
         try:
             if request.args.get("id_partner"):
-                id_partner = request.args.get("id_partner")
-                partner = self.partner_db.get_partner(id_partner)
-                return HttpResponse(HttpStatus.OK,
-                                    data=partner).get_response()
+                return self.__get_partner_by_id(request.args.get("id_partner"))
+
             elif request.args.get("partner_type"):
-                partner_type = request.args.get("partner_type")
-                if partner_type == "supplier":
-                    suppliers = self.partner_db.get_suppliers()
-                    return HttpResponse(HttpStatus.OK,
-                                        data=suppliers).get_response()
-                elif partner_type == "client":
-                    clients = self.partner_db.get_clients()
-                    return HttpResponse(HttpStatus.OK,
-                                        data=clients).get_response()
+                return self.__get_partners_by_type(request.args.get("partner_type"))
+
+            elif request.args.get("unpaid"):
+                return self.__get_nbr_unpaid_order_by_partner()
+
+            elif request.args.get("undelivered"):
+                return self.__get_nbr_undelivered_order_by_partner()
             else:
-                return HttpResponse(HttpStatus.OK,
-                                    data=self.partner_db.get_all_partners()).get_response()
+                return self.__get_all_partners()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+
+    def __get_all_partners(self):
+        return HttpResponse(HttpStatus.OK,
+                            data=self.partner_db.get_all_partners()).get_response()
+
+    def __get_partner_by_id(self, id_partner):
+        partner = self.partner_db.get_partner(id_partner)
+        return HttpResponse(HttpStatus.OK,
+                            data=partner).get_response()
+
+    def __get_partners_by_type(self, partner_type):
+        if partner_type == "supplier":
+            suppliers = self.partner_db.get_suppliers()
+            return HttpResponse(HttpStatus.OK,
+                                data=suppliers).get_response()
+        elif partner_type == "client":
+            clients = self.partner_db.get_clients()
+            return HttpResponse(HttpStatus.OK,
+                                data=clients).get_response()
+
+    def __get_nbr_unpaid_order_by_partner(self):
+        nbr_unpaid_order = self.partner_db.get_nbr_unpaid_order_by_partner()
+        return HttpResponse(HttpStatus.OK,
+                            data=nbr_unpaid_order).get_response()
+
+    def __get_nbr_undelivered_order_by_partner(self):
+        return HttpResponse(HttpStatus.OK,
+                            data=self.partner_db.get_nbr_undelivered_order_by_partner()).get_response()
 
     def post(self):
         try:

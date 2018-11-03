@@ -7,7 +7,7 @@ class Order(ExcelModel):
 
     def __init__(self, id_supplier, id_client, expected_delivery_date, payment_type,
                  l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None,
-                 id_order=None, products=None):
+                 id_order=None, products=None, complete_delivery_date=None, complete_payment_date = None):
         ExcelModel.__init__(self)
         self.__id_order = id_order
         self.__supplier = id_supplier
@@ -20,6 +20,8 @@ class Order(ExcelModel):
         self.__appro_s_off = appro_s_off
         self.__ship_sample_2h = ship_sample_2h
         self.__total_amount = total_amount
+        self.__complete_delivery_date = complete_delivery_date
+        self.__complete_payment_date = complete_payment_date
         if creation_date is None:
             self.__creation_date = datetime.datetime.today().strftime("%d-%m-%Y")
         else:
@@ -27,6 +29,16 @@ class Order(ExcelModel):
 
     def get_number_of_products(self):
         return len(self.__products)
+
+    def get_total_amout_per_order(self):
+        if self.__products:
+            sum = 0
+            for p in self.__products:
+                price = p.get_price_per_product()
+                sum += price
+            return sum
+        else:
+            return "There is no product in this order"
 
     def print_to_cell(self, worksheet, cell):
         #worksheet[str(cell[0])] = self.__id_order
@@ -115,15 +127,19 @@ class Order(ExcelModel):
 
     def set_total_amount(self, total_amount):
         self.__total_amount = total_amount
+        
+    def get_complete_delivery_date(self):
+        return self.__complete_delivery_date
 
-    def get_total_amout_per_order(self):
-        if self.__products:
-            sum = 0
-            for p in self.__products:
-                price = p.get_price_per_product()
-                sum += price
-            return sum
-        else:
-            return "There is no product in this order"
+    def set_complete_delivery_date(self, complete_delivery_date):
+        self.__complete_delivery_date = complete_delivery_date
+        
+    def get_complete_payment_date(self):
+        return self.__complete_payment_date
+
+    def set_complete_payment_date(self, complete_payment_date):
+        self.__complete_payment_date = complete_payment_date
+
+    
 
 
