@@ -1,3 +1,5 @@
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import WritingDataBaseError
 
@@ -85,6 +87,60 @@ class OrderDataBase:
             Database.query("UPDATE Orders "
                            "SET total_amount = ?"
                            "WHERE id_order = ?", (total_amount, id_order))
+        except (ValueError, TypeError):
+            raise WritingDataBaseError("Wrong type Value.")
+
+    def supplier_income(self):
+        """Give the income from every supplier in the month"""
+        try:
+            # Get suppliers id
+            partner_stats = {}
+            query_suppliers = Database.query("SELECT id_partner FROM Partners "
+                                             "WHERE partner_type = 'supplier'")
+            for row in query_suppliers:
+                partner_stats[str(row[0])] = [0] * 12
+            twelve_month_ago = datetime.today() - relativedelta(months=11)
+            months = [(twelve_month_ago + relativedelta(months=i)).strftime('%m/%Y') for i in range(12)]
+            for i in months:
+                values = (i[0:2], i[3:7])  # month and year
+                query_income = Database.query("SELECT id_supplier, SUM(total_amount) "
+                                              "FROM Orders, Partners "
+                                              "WHERE Orders.id_supplier = Partners.id_partner "
+                                              "AND strftime('%m', creation_date) = ?"
+                                              "AND strftime('%Y', creation_date) = ? "
+                                              "GROUP BY id_partner",
+                                              values)
+                for row in query_income:
+                    partner_stats[str(row[0])][months.index(i)] = row[1]
+            print(partner_stats)
+            return {"months": months, "partner_stats": partner_stats}
+        except (ValueError, TypeError):
+            raise WritingDataBaseError("Wrong type Value.")
+
+    def client_income(self):
+        """Give the income from every client in the month"""
+        try:
+            # Get clients id
+            partner_stats = {}
+            query_clients = Database.query("SELECT id_partner FROM Partners "
+                                           "WHERE partner_type = 'client'")
+            for row in query_clients:
+                partner_stats[str(row[0])] = [0] * 12
+            twelve_month_ago = datetime.today() - relativedelta(months=11)
+            months = [(twelve_month_ago + relativedelta(months=i)).strftime('%m/%Y') for i in range(12)]
+            for i in months:
+                values = (i[0:2], i[3:7])  # month and year
+                query_income = Database.query("SELECT id_client, SUM(total_amount) "
+                                              "FROM Orders, Partners "
+                                              "WHERE Orders.id_client = Partners.id_partner "
+                                              "AND strftime('%m', creation_date) = ?"
+                                              "AND strftime('%Y', creation_date) = ? "
+                                              "GROUP BY id_partner",
+                                              values)
+                for row in query_income:
+                    partner_stats[str(row[0])][months.index(i)] = row[1]
+            print(partner_stats)
+            return {"months": months, "partner_stats": partner_stats}
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
