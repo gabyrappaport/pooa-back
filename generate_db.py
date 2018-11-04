@@ -17,7 +17,9 @@ Orders(id_order INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      appro_s_off TEXT,
      ship_sample_2h TEXT,
      total_amount REAL,
-     creation_date DATE
+     creation_date DATE,
+     complete_delivery_date DATE,
+     complete_payment_date DATE
       )""")
 
 cursor.execute("""CREATE TABLE IF NOT EXISTS 
@@ -74,22 +76,23 @@ Shipments = [((0), ("2018-11-01"), "bateau", "Shanghai", "Le Havre"),
              ((10), ("2018-07-17"), "bateau", "Shanghai", "Le Havre")
              ]
 
-orders_list = [[(0), (6), (1), "2018-12-10", "TT", "OK", "OK", "OK", "SSAttF", 1, "2018-09-10"],
-               [(1), (7), (2), "2018-11-09", "LC", "OK", "OK", "OK", "SSAttF", 2, "2018-09-01"],
-               [(2), (7), (1), "2019-01-02", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-09-05"],
-               [(3), (6), (2), "2018-11-05", "TT", "OK", "OK", "OK", "SSAttF", 64, "2018-08-15"],
-               [(4), (8), (1), "2018-08-12", "TT", "OK", "OK", "OK", "SSAttF", 1409, "2018-07-15"],
-               [(5), (9), (5), "2018-10-24", "LC", "OK", "OK", "OK", "SSAttF", 169, "2018-09-05"],
-               [(6), (6), (1), "2018-09-04", "TT", "OK", "OK", "OK", "SSAttF", 142, "2018-06-10"],
-               [(7), (8), (3), "2018-09-09", "LC", "OK", "OK", "OK", "SSAttF", 183, "2018-07-01"],
-               [(8), (7), (4), "2018-08-02", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-05-05"],
-               [(9), (6), (2), "2018-07-05", "TT", "OK", "OK", "OK", "SSAttF", 64, "2018-04-15"],
-               [(10), (8), (1), "2018-06-12", "TT", "OK", "OK", "OK", "SSAttF", 1409, "2018-04-15"],
-               [(11), (9), (5), "2018-05-24", "LC", "OK", "OK", "OK", "SSAttF", 169, "2018-02-05"],
-               [(12), (9), (4), "2018-10-02", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-08-31"],
-               [(13), (8), (4), "2018-11-04", "LC", "OK", "OK", "OK", "SSAttF", 560, "2018-08-15"],
-               [(14), (7), (3), "2018-09-12", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-06-15"],
-               [(15), (6), (5), "2018-09-30", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-07-18"]]
+orders_list = [
+    [(0), (6), (1), "2018-12-10", "TT", "OK", "OK", "OK", "SSAttF", 1, "2018-09-01", "NULL", "NULL"],
+    [(1), (7), (2), "2018-11-09", "LC", "OK", "OK", "OK", "SSAttF", 2, "2018-09-01", "2018-09-10", "2018-09-10"],
+    [(2), (7), (1), "2019-01-02", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-09-02", "2018-09-10", "NULL"],
+    [(3), (6), (2), "2018-11-05", "TT", "OK", "OK", "OK", "SSAttF", 64, "2018-08-15", "2018-09-10", "NULL"],
+    [(4), (8), (1), "2018-08-12", "TT", "OK", "OK", "OK", "SSAttF", 1409, "2018-07-15", "2018-09-10", "2018-09-10"],
+    [(5), (9), (5), "2018-10-24", "LC", "OK", "OK", "OK", "SSAttF", 169, "2018-06-05", "2018-09-10", "2018-09-10"],
+    [(6), (6), (1), "2018-09-04", "TT", "OK", "OK", "OK", "SSAttF", 142, "2018-06-10", "2018-09-10", "2018-09-10"],
+    [(7), (8), (3), "2018-09-09", "LC", "OK", "OK", "OK", "SSAttF", 183, "2018-07-01", "2018-09-10", "2018-09-10"],
+    [(8), (7), (4), "2018-08-02", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-05-05", "2018-09-10", "2018-09-10"],
+    [(9), (6), (2), "2018-07-05", "TT", "OK", "OK", "OK", "SSAttF", 64, "2018-04-15", "2018-09-10", "2018-09-10"],
+    [(10), (8), (1), "2018-06-12", "TT", "OK", "OK", "OK", "SSAttF", 1409, "2018-04-15", "2018-09-10", "2018-09-10"],
+    [(11), (9), (5), "2018-05-24", "LC", "OK", "OK", "OK", "SSAttF", 169, "2018-02-5", "2018-09-10", "2018-09-10"],
+    [(12), (9), (4), "2018-10-02", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-08-31", "2018-09-10", "2018-09-10"],
+    [(13), (8), (4), "2018-11-04", "LC", "OK", "OK", "OK", "SSAttF", 560, "2018-08-15", "2018-09-10", "2018-09-10"],
+    [(14), (7), (3), "2018-09-12", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-06-15", "2018-09-10", "2018-09-10"],
+    [(15), (6), (5), "2018-09-30", "LC", "OK", "OK", "OK", "SSAttF", 124, "2018-07-18", "2018-09-10", "2018-09-10"]]
 
 products = [((0), (0), (2), "ref_1", "blue", 17.5, 12, 11),
             ((1), (0), (2), "ref_2", "grey", 20, 10, 14),
@@ -142,16 +145,16 @@ products = [((0), (0), (2), "ref_1", "blue", 17.5, 12, 11),
             ]
 
 for i in range(len(orders_list)):
-    orders_list[i][9] = ((float(products[i][5]) * float(products[i][6]) * float(products[i][7])) + \
-                         (float(products[i + 1][5]) * float(products[i + 1][6]) * float(products[i + 1][7])) + \
-                         (float(products[i + 2][5]) * float(products[i + 2][6]) * float(products[i + 2][7]))).__round__(
-        2)
+    orders_list[i][9] = \
+        ((float(products[i][5]) * float(products[i][6]) * float(products[i][7])) + \
+         (float(products[i + 1][5]) * float(products[i + 1][6]) * float(products[i + 1][7])) + \
+         (float(products[i + 2][5]) * float(products[i + 2][6]) * float(products[i + 2][7]))).__round__(2)
 
 for partner in partners:
     cursor.execute("INSERT INTO Partners VALUES(?,?,?)", partner)
 
 for order in orders_list:
-    cursor.execute("INSERT INTO Orders VALUES (?,?,?,?,?,?,?,?,?,?,?)", order)
+    cursor.execute("INSERT INTO Orders VALUES (?,?,?,?,?,?,?,?,?,?,?, ?, ?)", order)
 
 for shipment in Shipments:
     cursor.execute("INSERT INTO Shipments VALUES (?,?,?,?,?)", shipment)

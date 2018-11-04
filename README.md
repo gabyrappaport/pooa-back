@@ -1,5 +1,4 @@
-# pooa-back
-
+# itn
 
 ##### Projet réalisé pour le cours de POOA par Gabrielle Rappaport, Alix Mallard et Camille Nathan
 
@@ -22,4 +21,3 @@ Installer les librairies python :
 ```
 pip install -r requirements.txt
 ```
-

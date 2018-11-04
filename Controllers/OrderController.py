@@ -8,6 +8,18 @@ from DataBase.ProductDataBase import ProductDatabase
 from Models.Order import *
 from Models.Product import Product
 
+""" REST API for Orders. 
+
+Note 1 :
+We are using flask_restful, which forces us to create only one of each HTTP Methods,
+Thus, we have only one public GET which calls several private ones.
+ 
+Note 2 : 
+The project aims to be more consistent and longer, especially for the front.
+This is why some HTTP Methods are not yet called by the front, like DELETE or PUT,
+but are still necessary and fully working.
+ """
+
 
 class OrderController(Resource):
 
@@ -16,7 +28,6 @@ class OrderController(Resource):
         self.product_db = ProductDatabase()
 
     def get(self):
-        """Using Resource forces us to create REST APIs with only one GET"""
         try:
             # Get one order with its id
             if request.args.get("id_order"):
@@ -81,6 +92,10 @@ class OrderController(Resource):
                           str(data["appro_s_off"]),
                           str(data["ship_sample_2h"]),
                           id_order=int(data["id_order"]))
+            if "complete_payment_date" in data.keys():
+                order.set_complete_payment_date(data["complete_payment_date"])
+            if "complete_delivery_date" in data.keys():
+                order.set_complete_delivery_date(data["complete_delivery_date"])
             # Update products in order and new total amount
             id_products_keep = []
             total_amount = 0

@@ -62,6 +62,8 @@ class OrderDataBase:
                       order.get_appro_s_off(),
                       order.get_ship_sample_2h(),
                       order.get_total_amount(),
+                      order.get_complete_delivery_date(),
+                      order.get_complete_payment_date(),
                       int(order.get_id_order()))
             Database.query("UPDATE Orders "
                            "SET id_supplier = ?,"
@@ -72,7 +74,9 @@ class OrderDataBase:
                            "appro_ship_sample = ?,"
                            "appro_s_off = ?,"
                            "ship_sample_2h = ?,"
-                           "total_amount = ?"
+                           "total_amount = ?, "
+                           "complete_delivery_date= ?, "
+                           "complete_payment_date= ? "
                            "WHERE id_order = ?", values)
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
@@ -156,4 +160,6 @@ class OrderDataBase:
                 "appro_s_off": order[7],
                 "ship_sample_2h": order[8],
                 "total_amount": order[9],
-                "creation_date": order[10]}
+                "creation_date": order[10],
+                "complete_delivery_date": order[11],
+                "complete_payment_date": order[12]}
