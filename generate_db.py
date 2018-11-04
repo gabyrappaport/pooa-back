@@ -45,14 +45,6 @@ Products(id_product INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
      price REAL,
      commission REAL)''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS
-Users(id_user INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-     name TEXT,
-     surname TEXT,
-     email TEXT,
-     password TEXT,
-     user_type TEXT)''')
-
 partners = [((1), "client", "Zara"),
             ((2), "client", "HM"),
             ((3), "client", "Mango"),
