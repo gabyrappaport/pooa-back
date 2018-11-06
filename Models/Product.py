@@ -22,7 +22,7 @@ class Product(ExcelModel):
         worksheet[str(cell[4])] = self.__meter
         worksheet[str(cell[5])] = self.__price
         worksheet[str(cell[6])] = self.get_price_per_product()
-        #worksheet[str(cell[7])] = self.__id_shipment
+        #worksheet[:qstr(cell[7])] = self.__id_shipment
 
     def get_price_per_product(self):
         return self.__price * self.__meter
