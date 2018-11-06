@@ -38,18 +38,17 @@ class PartnerDataBase:
         """Get all partners with number of undelivered orders."""
 
         query_undelivered = Database.query(
-            "SELECT Partners.id_partner, company, COUNT(Orders.complete_delivery_date) as 'undelivered' "
+            "SELECT Partners.id_partner, company, COUNT(id_partner) as 'undelivered' "
             "FROM Partners , Orders "
             "WHERE Partners.id_partner = Orders.id_supplier "
-            "AND Orders.complete_delivery_date = 'NULL' "
+            "AND Orders.complete_delivery_date IS NULL "
             "GROUP BY Partners.id_partner, company "
             "UNION "
-            "SELECT Partners.id_partner, company, COUNT(Orders.complete_delivery_date) as 'undelivered' "
+            "SELECT Partners.id_partner, company, COUNT(id_partner) as 'undelivered' "
             "FROM Partners , Orders "
             "WHERE Partners.id_partner = Orders.id_client "
-            "AND Orders.complete_delivery_date = 'NULL' "
+            "AND Orders.complete_delivery_date IS NULL "
             "GROUP BY Partners.id_partner, company ")
-
         result = []
         for row in query_undelivered:
             partner = self.__list_to_dic_partner_undelivered(row)
@@ -60,16 +59,16 @@ class PartnerDataBase:
         """Get all partners with number of unpaid orders."""
 
         query_undelivered = Database.query(
-            "SELECT id_partner, company, COUNT(complete_delivery_date) as 'unpaid' "
+            "SELECT id_partner, company, COUNT(id_partner) as 'unpaid' "
             "FROM Partners , Orders "
             "WHERE Partners.id_partner = Orders.id_supplier "
-            "AND Orders.complete_payment_date = 'NULL' "
+            "AND Orders.complete_payment_date IS NULL "
             "GROUP BY Partners.id_partner, company "
             "UNION "
-            "SELECT id_partner, company, COUNT(complete_delivery_date) as 'unpaid' "
+            "SELECT id_partner, company, COUNT(id_partner) as 'unpaid' "
             "FROM Partners , Orders "
             "WHERE Partners.id_partner = Orders.id_client "
-            "AND Orders.complete_payment_date = 'NULL' "
+            "AND Orders.complete_payment_date IS NULL "
             "GROUP BY Partners.id_partner, company ")
 
         result = []

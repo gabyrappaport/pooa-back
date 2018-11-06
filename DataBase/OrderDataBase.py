@@ -24,6 +24,7 @@ class OrderDataBase:
                                      (id_order,))
         order = query_order.fetchone()
         if order is not None:
+            print(order)
             return self.__list_to_dic_order(order)
         else:
             return order
