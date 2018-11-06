@@ -94,7 +94,7 @@ class OrderController(Resource):
     def __update_products(self, id_order, products):
         products_in_order = []
         total_amount = 0
-        for p in products:
+        for p in products: # dans p il y a mon nouveau produit
             product = self.__product_from_data(id_order, p)
             total_amount += product.get_price_with_commission()
             # If the product already has an id_product, it means it is already stored in the database,
@@ -110,7 +110,6 @@ class OrderController(Resource):
         return total_amount
 
     def __order_from_data(self, data):
-        print(data)
         order = Order(int(data["id_supplier"]),
                       int(data["id_client"]),
                       datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
