@@ -7,7 +7,8 @@ from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.PartnerDataBase import PartnerDataBase
 from Models.Partner import Partner
 
-""" REST API for Partners. 
+""" 
+REST API for Partners. 
 
 Note 1 :
 We are using flask_restful, which forces us to create only one of each HTTP Methods,

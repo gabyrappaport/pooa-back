@@ -6,9 +6,22 @@ from flask_restful import Resource
 
 from Controllers.Helper import WritingDataBaseError
 from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
+from DataBase.ProductDataBase import ProductDatabase
 from DataBase.ShipmentDataBase import ShipmentDataBase
 from Models.Shipment import Shipment
-from DataBase.ProductDataBase import ProductDatabase
+
+""" 
+REST API for Shipments. 
+
+Note 1 :
+We are using flask_restful, which forces us to create only one of each HTTP Methods,
+Thus, we have only one public GET which calls several private ones.
+
+Note 2 : 
+The project aims to be more consistent and longer, especially for the front.
+This is why some HTTP Methods are not yet called by the front, like DELETE or PUT,
+but are still necessary and fully working.
+"""
 
 
 class ShipmentController(Resource):
@@ -18,35 +31,50 @@ class ShipmentController(Resource):
         self.product_db = ProductDatabase()
 
     def get(self):
-        """Using Resource forces us to create REST APIs with only one GET"""
         try:
             if request.args.get("expedition_date"):
-                shipments = self.shipment_db.get_shipments_expedition_date(request.args.get("expedition_date"))
-
+                return self.__get_shipments_by_expedition_date(request.args.get("expedition_date"))
             elif request.args.get("id_order"):
-                shipments = self.shipment_db.get_shipments_id_order(request.args.get("id_order"))
-
+                return self.__get_shipments_by_id_order(request.args.get("id_order"))
             elif request.args.get("id_shipment"):
-                shipments = self.shipment_db.get_shipment_id_shipment(request.args.get("id_shipment"))
-
-            if len(shipments) > 1:
-                shipments_list = []
-                for shipment in shipments:
-                    list_product = self.product_db.get_products_from_id_shipment(shipment['id_shipment'])
-                    shipment["products"] = list_product
-                    shipments_list.append(shipment)
-                return HttpResponse(HttpStatus.OK,
-                                    data=shipments_list).get_response()
-            elif len(shipments) == 1:
-                list_product = self.product_db.get_products_from_id_shipment(shipments[0]['id_shipment'])
-                shipments[0]['products'] = list_product
-                return HttpResponse(HttpStatus.OK,
-                                    data=shipments).get_response()
+                return self.__get_shipment_by_id_shipment(request.args.get("id_shipment"))
             else:
-                return HttpResponse(HttpStatus.OK,
-                                    data=self.shipment_db.get_all_shipments()).get_response()
+                return self.__get_shipment_all_shipments()
         except (ValueError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+
+    def __get_shipments_by_id_order(self, id_order):
+        shipments = self.shipment_db.get_shipments_id_order(id_order)
+        self.__set_products(shipments)
+        return HttpResponse(HttpStatus.OK,
+                            data=shipments).get_response()
+
+    def __get_shipments_by_expedition_date(self, expedition_date):
+        shipments = self.shipment_db.get_shipments_expedition_date(expedition_date)
+        self.__set_products(shipments)
+        return HttpResponse(HttpStatus.OK,
+                            data=shipments).get_response()
+
+    def __get_shipment_by_id_shipment(self, id_shipment):
+        shipment = self.shipment_db.get_shipment_id_shipment(id_shipment)
+        self.__set_products(shipment)
+        return HttpResponse(HttpStatus.OK,
+                            data=shipment).get_response()
+
+    def __get_shipment_all_shipments(self):
+        shipments = self.shipment_db.get_all_shipments()
+        self.__set_products(shipments)
+        return HttpResponse(HttpStatus.OK,
+                            data=shipments).get_response()
+
+    def __set_products(self, shipments):
+        if shipments is None:
+            return
+        if type(shipments) == list:
+            for s in shipments:
+                s['products'] = self.product_db.get_products_from_id_shipment(s['id_shipment'])
+        else:
+            shipments["products"] = self.product_db.get_products_from_id_shipment(shipments['id_shipment'])
 
     def post(self):
         try:

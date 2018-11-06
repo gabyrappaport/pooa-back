@@ -62,6 +62,9 @@ class Order(ExcelModel):
     def get_id_order(self):
         return self.__id_order
 
+    def set_id_order(self, id_order):
+        self.__id_order = id_order
+
     def get_id_supplier(self):
         return self.__supplier
 

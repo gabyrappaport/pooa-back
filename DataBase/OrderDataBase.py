@@ -95,8 +95,8 @@ class OrderDataBase:
 
     def __list_to_dic_order(self, order):
         return {"id_order": order[0],
-                "supplier": order[1],
-                "client": order[2],
+                "id_supplier": order[1],
+                "id_client": order[2],
                 "expected_delivery_date": order[3],
                 "payment_type": order[4],
                 "l_dips": order[5],

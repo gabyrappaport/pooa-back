@@ -39,18 +39,18 @@ class ProductDatabase:
         """Delete a product with its id"""
         Database.query("DELETE FROM Products WHERE id_product = ?", (id_product,))
 
-    def delete_old_products(self, id_order, id_products_keep):
+    def delete_old_products(self, id_order, products_in_order):
         """Delete the products that do not exist anymore during the update of an order"""
-        if len(id_products_keep) == 1:
-            sql = "DELETE FROM Products WHERE id_order = ? AND id_product  != ?"
-            values = (id_order, id_products_keep[0])
-        elif len(id_products_keep) == 0:
-            sql = "DELETE FROM Products WHERE id_order = ?"
-            values = (id_order,)
-        elif len(id_products_keep) > 1:
-            sql = "DELETE FROM Products WHERE id_order = ? AND id_product NOT IN ?"
-            values = (id_order, tuple(id_products_keep))
-        Database.query(sql, values)
+        if len(products_in_order) == 1:
+            Database.query("DELETE FROM Products WHERE id_order = ? AND id_product != ?",
+                           (id_order, products_in_order[0]))
+        elif len(products_in_order) == 0:
+            Database.query("DELETE FROM Products WHERE id_order = ?", (id_order,))
+        elif len(products_in_order) > 1:
+            Database.query("DELETE FROM Products "
+                           "WHERE id_order = ? "
+                           "AND id_product NOT IN ?",
+                           (id_order, tuple(products_in_order)))
 
     def get_products(self, id_order):
         """Give the list of products in the order with its id"""
@@ -63,6 +63,8 @@ class ProductDatabase:
         return result
 
     def get_products_from_id_shipment(self, id_shipment):
+        print("BOOO")
+        print(id_shipment)
         try:
             query_product_from_ship = Database.query("SELECT * FROM Products WHERE id_shipment=?", (id_shipment,))
             result = []
@@ -76,7 +78,7 @@ class ProductDatabase:
     def update_product(self, product):
         try:
             values = (int(product.get_id_order()),
-                      int(product.get_reference()),
+                      str(product.get_reference()),
                       product.get_color(),
                       product.get_meter(),
                       int(product.get_price()),
@@ -96,7 +98,7 @@ class ProductDatabase:
                 Database.query("UPDATE Products"
                                " SET id_shipment = ?"
                                "WHERE id_product = ?", values)
-        except (ValueError, TypeError):
+        except (ValueError, TypeError) as e:
             raise WritingDataBaseError("Wrong type Value.")
 
     def set_id_shipment(self, id_product, id_shipment):
@@ -116,7 +118,8 @@ class ProductDatabase:
 
     def get_id_product_from_shipment(self, id_shipment):
         try:
-            query_product_from_ship = Database.query("SELECT id_product FROM Products WHERE id_shipment=?", (id_shipment,))
+            query_product_from_ship = Database.query("SELECT id_product FROM Products WHERE id_shipment=?",
+                                                     (id_shipment,))
             result = []
             for row in query_product_from_ship:
                 result.append(row[0])

@@ -15,7 +15,7 @@ class HttpResponse:
             response["message"] = self.message
         if self.data is not None:
             response["data"] = self.data
-        return Response(str(response).replace("\'", "\"").replace("None", "-1"),
+        return Response(str(response).replace("\'", "\"").replace("None", "-1").replace("NULL", "-1"),
                         status=self.http_status.value["code"],
                         mimetype="application/json")
 

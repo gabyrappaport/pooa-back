@@ -8,7 +8,8 @@ from DataBase.ProductDataBase import ProductDatabase
 from Models.Order import *
 from Models.Product import Product
 
-""" REST API for Orders. 
+""" 
+REST API for Orders. 
 
 Note 1 :
 We are using flask_restful, which forces us to create only one of each HTTP Methods,
@@ -18,7 +19,7 @@ Note 2 :
 The project aims to be more consistent and longer, especially for the front.
 This is why some HTTP Methods are not yet called by the front, like DELETE or PUT,
 but are still necessary and fully working.
- """
+"""
 
 
 class OrderController(Resource):
@@ -29,21 +30,10 @@ class OrderController(Resource):
 
     def get(self):
         try:
-            # Get one order with its id
             if request.args.get("id_order"):
-                id_order = request.args.get("id_order")
-                order = self.order_db.get_order(id_order)
-                if order is not None:
-                    order["products"] = self.product_db.get_products(id_order)
-                return HttpResponse(HttpStatus.OK,
-                                    data=order).get_response()
-            # Get all orders
+                return self.__get_order_by_id(request.args.get("id_order"))
             else:
-                orders = self.order_db.get_all_orders()
-                for order in orders:
-                    order["products"] = self.product_db.get_products(order["id_order"])
-                return HttpResponse(HttpStatus.OK,
-                                    data=orders).get_response()
+                return self.__get_all_orders()
         except (werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
@@ -51,80 +41,26 @@ class OrderController(Resource):
         try:
             # Create new order
             data = request.get_json(force=True)
-            order = Order(int(data["id_supplier"]),
-                          int(data["id_client"]),
-                          datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
-                          str(data["payment_type"]),
-                          str(data["l_dips"]),
-                          str(data["appro_ship_sample"]),
-                          str(data["appro_s_off"]),
-                          str(data["ship_sample_2h"]))
+            order = self.__order_from_data(data)
             id_order = self.order_db.add_order(order)
             # Add products in new order and calculate total amount
-            products = []
             total_amount = 0
             for p in data["products"]:
-                product = Product(int(id_order),
-                                  str(p["reference"]),
-                                  str(p["color"]),
-                                  float(p["meter"]),
-                                  float(p["price"]),
-                                  float(p["commission"]))
-                products.append(product)
+                product = self.__product_from_data(id_order, p)
                 self.product_db.add_product(product)
-                total_amount += float(p["commission"]) / 100 * float(p["price"]) * float(p["meter"])
-            order.set_total_amount(total_amount.__round__(2))
-            self.order_db.set_total_amount(total_amount.__round__(2), id_order)
+                total_amount += product.get_price_with_commission()
+            self.order_db.set_total_amount(total_amount, id_order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def put(self):
         try:
-            # Update order
             data = request.get_json(force=True)
-            order = Order(int(data["supplier"]),
-                          int(data["client"]),
-                          datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
-                          str(data["payment_type"]),
-                          str(data["l_dips"]),
-                          str(data["appro_ship_sample"]),
-                          str(data["appro_s_off"]),
-                          str(data["ship_sample_2h"]),
-                          id_order=int(data["id_order"]))
-            if "complete_payment_date" in data.keys():
-                order.set_complete_payment_date(data["complete_payment_date"])
-            if "complete_delivery_date" in data.keys():
-                order.set_complete_delivery_date(data["complete_delivery_date"])
-            # Update products in order and new total amount
-            id_products_keep = []
-            total_amount = 0
-            for p in data["products"]:
-                # If existing products are in updated order
-                if "id_product" in p.keys():
-                    product = Product(int(order.get_id_order()),
-                                      str(p["reference"]),
-                                      str(p["color"]),
-                                      float(p["meter"]),
-                                      float(p["price"]),
-                                      float(p["commission"]),
-                                      id_product=int(p["id_product"]))
-                    total_amount += float(p["commission"]) / 100 * float(p["price"]) * float(p["meter"])
-                    self.product_db.update_product(product)
-                # If new products are in updated order, we add them and delete the old ones
-                else:
-                    product = Product(int(order.get_id_order()),
-                                      str(p["reference"]),
-                                      str(p["color"]),
-                                      float(p["meter"]),
-                                      float(p["price"]),
-                                      float(p["commission"]))
-                    total_amount += float(p["commission"]) / 100 * float(p["price"]) * float(p["meter"])
-                    id_product = self.product_db.add_product(product)
-                    id_products_keep.append(id_product)
-            order.set_total_amount(total_amount.__round__(2))
+            order = self.__order_from_data(data)
+            updated_total_amount = self.__update_products(order.get_id_order(), data["products"])
+            order.set_total_amount(updated_total_amount)
             self.order_db.update_order(order)
-            self.product_db.delete_old_products(order.get_id_order(), id_products_keep)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -134,9 +70,72 @@ class OrderController(Resource):
             id_order = request.args.get("id_order")
             self.order_db.delete_order(id_order)
             products = self.product_db.get_products(id_order)
-            # Delete products that are in the order deleted
+            # Delete products of the deleted order.
             for i in products:
                 self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+
+    def __get_order_by_id(self, id_order):
+        order = self.order_db.get_order(id_order)
+        if order is not None:
+            order["products"] = self.product_db.get_products(id_order)
+        return HttpResponse(HttpStatus.OK,
+                            data=order).get_response()
+
+    def __get_all_orders(self):
+        orders = self.order_db.get_all_orders()
+        for order in orders:
+            order["products"] = self.product_db.get_products(order["id_order"])
+        return HttpResponse(HttpStatus.OK,
+                            data=orders).get_response()
+
+    def __update_products(self, id_order, products):
+        products_in_order = []
+        total_amount = 0
+        for p in products:
+            product = self.__product_from_data(id_order, p)
+            total_amount += product.get_price_with_commission()
+            # If the product already has an id_product, it means it is already stored in the database,
+            # so we only have to update it.
+            if "id_product" in p.keys():
+                self.product_db.update_product(product)
+            # If the product doesn't have an id_product, it means it is a new product in the database,
+            # so we need to add it.
+            else:
+                product.set_id_product(self.product_db.add_product(product))
+            products_in_order.append(product.get_id_product())
+        self.product_db.delete_old_products(id_order, products_in_order)
+        return total_amount
+
+    def __order_from_data(self, data):
+        print(data)
+        order = Order(int(data["id_supplier"]),
+                      int(data["id_client"]),
+                      datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
+                      str(data["payment_type"]),
+                      str(data["l_dips"]),
+                      str(data["appro_ship_sample"]),
+                      str(data["appro_s_off"]),
+                      str(data["ship_sample_2h"]))
+        if "id_order" in data.keys():
+            order.set_id_order(data["id_order"])
+        if "complete_payment_date" in data.keys() and data["complete_payment_date"] != -1:
+            order.set_complete_payment_date(
+                datetime.datetime.strptime(data["complete_payment_date"], "%Y-%m-%d").date())
+        if "complete_delivery_date" in data.keys() and data["complete_delivery_date"] != -1:
+            order.set_complete_delivery_date(
+                datetime.datetime.strptime(data["complete_delivery_date"], "%Y-%m-%d").date())
+        return order
+
+    def __product_from_data(self, id_order, data_product):
+        product = Product(int(id_order),
+                          str(data_product["reference"]),
+                          str(data_product["color"]),
+                          float(data_product["meter"]),
+                          float(data_product["price"]),
+                          float(data_product["commission"]))
+        if "id_product" in data_product.keys():
+            product.set_id_product(data_product["id_product"])
+        return product

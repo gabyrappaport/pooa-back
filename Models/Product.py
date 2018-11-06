@@ -27,8 +27,14 @@ class Product(ExcelModel):
     def get_price_per_product(self):
         return self.__price * self.__meter
 
+    def get_price_with_commission(self):
+        return (self.__commission / 100 * self.__price * self.__meter).__round__(2)
+
     def get_id_product(self):
         return self.__id_product
+    
+    def set_id_product(self, id_product):
+        self.__id_product = id_product
 
     def get_id_order(self):
         return self.__id_order
