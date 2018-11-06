@@ -11,7 +11,7 @@ class Partner(ExcelModel):
 
     def get_id_partner(self):
         return self.__id_partner
-        
+
     def get_partner_type(self):
         return self.__partner_type
 
@@ -28,3 +28,5 @@ class Partner(ExcelModel):
         # worksheet[str(cell[0])] = self.__id_partner
         # worksheet[str(cell[1])] = self.__partner_type
         worksheet[str(cell[2])] = self.__company
+
+    id_partner = property(get_id_partner)

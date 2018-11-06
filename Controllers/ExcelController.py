@@ -4,7 +4,7 @@ from flask import request, send_from_directory
 from flask_restful import Resource
 
 # from Models.Shipment import Shipment
-from Controllers.Helper.Generate_excel import GenerateExcel
+from Controllers.Helper.GenerateExcel import GenerateExcel
 from DataBase.OrderDataBase import *
 from DataBase.PartnerDataBase import PartnerDataBase
 from DataBase.ProductDataBase import ProductDatabase
