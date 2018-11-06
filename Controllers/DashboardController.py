@@ -15,11 +15,11 @@ class DashboardController(Resource):
         """Using Resource forces us to create REST APIs with only one GET"""
         try:
             if request.args.get("partner_type") == 'client':
-                data = self.order_db.client_income()
+                data = self.order_db.partner_income('client')
                 return HttpResponse(HttpStatus.OK,
                                     data=data).get_response()
             elif request.args.get("partner_type") == 'supplier':
-                data = self.order_db.supplier_income()
+                data = self.order_db.partner_income('supplier')
                 return HttpResponse(HttpStatus.OK,
                                     data=data).get_response()
         except (werkzeug.exceptions.BadRequest) as e:

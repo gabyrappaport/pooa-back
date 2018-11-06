@@ -79,13 +79,15 @@ class ShipmentController(Resource):
     def post(self):
         try:
             data = request.get_json(force=True)
-            shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%d-%m-%Y").date(),
+            shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%Y-%m-%d").date(),
                                 str(data["transportation"]),
                                 str(data["departure_location"]),
                                 str(data["arrival_location"]))
-            self.shipment_db.add_shipment(shipment)
-            for id_product in data["products"]:
-                self.product_db.set_id_shipment(id_product, shipment.get_id_shipment)
+            id_shipment = self.shipment_db.add_shipment(shipment)
+            print(id_shipment)
+            if "products" in data.keys():
+                for id_product in data["products"]:
+                    self.product_db.set_id_shipment(id_product, id_shipment)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
@@ -93,7 +95,7 @@ class ShipmentController(Resource):
     def put(self):
         try:
             data = request.get_json(force=True)
-            shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%d-%m-%Y").date(),
+            shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%Y-%m-%d").date(),
                                 str(data["transportation"]),
                                 str(data["departure_location"]),
                                 str(data["arrival_location"]),
