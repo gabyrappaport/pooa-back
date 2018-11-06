@@ -8,6 +8,7 @@ jdcal==1.4
 Jinja2==2.10
 MarkupSafe==1.0
 openpyxl==2.5.9
+python-dateutil==2.7.5
 pytz==2018.7
 six==1.11.0
 Werkzeug==0.14.1

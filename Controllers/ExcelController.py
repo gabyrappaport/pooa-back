@@ -24,7 +24,7 @@ class ExcelController(Resource):
     def get(self):
         """ First part of the function : recovery of order data """
         if not request.args.get("id_order"):
-            raise NotImplementedError("error, please type a valid id_order")
+            raise NameError("error, please type 'id_order=' with a valid id_order")
 
         if request.args.get("id_order"):
             id_order = request.args.get("id_order")
@@ -33,14 +33,19 @@ class ExcelController(Resource):
             # We create an Order object with the information in the database
             if order_db is not None:
                 total_amount = 0
-                order = ExcelController.__get_order_info(self, id_order, order_db)
-                order_db["products"] = self.product_db.get_products(id_order)
-                products = []
-                # We create a Product object thanks to information in order_db
-                for p in order_db["products"]:
-                    product, amount_product = ExcelController.__get_info_product(self, id_order, p)
-                    total_amount += amount_product
-                products.append(product)
+                order = ExcelController.__get_order_info(order_db)
+                if self.product_db.get_products(id_order) is not None:
+                    order_db["products"] = self.product_db.get_products(id_order)
+                    products = []
+                    # We create a Product object thanks to information in order_db
+                    for p in order_db["products"]:
+                        product, amount_product = ExcelController.__get_info_product(id_order, p)
+                        total_amount += amount_product
+                        products.append(product)
+                else:
+                    raise ValueError("there isn't any product in your order")
+            else:
+                raise ValueError("please enter a valid id_order")
             # We update this information on the order project
             order.set_products(products)
             order.set_total_amount(total_amount)
@@ -48,11 +53,11 @@ class ExcelController(Resource):
 
             """Second part of the function : recovery of client data"""
             client_db = self.partner_db.get_partner(int(order_db["client"]))
-            client = ExcelController.__get_partner_info(self, client_db)
+            client = ExcelController.__get_partner_info(client_db)
 
             """Third part of the function : recovery of supplier data"""
             supplier_db = self.partner_db.get_partner(int(order_db["supplier"]))
-            supplier = ExcelController.__get_partner_info(self, supplier_db)
+            supplier = ExcelController.__get_partner_info(supplier_db)
 
             """Fourth part of the function :information about the excel file"""
 
@@ -64,10 +69,13 @@ class ExcelController(Resource):
             excel.generate_excel(order, client, supplier, uploads + "/" + filename, order.get_number_of_products())
             return send_from_directory(directory=uploads, filename=filename)
         else:
-            raise NotImplementedError("error, please type a valid id_order")
+            raise NameError("error, please type 'id_order=' with a valid id_order")
 
-    def __get_order_info(self, id_order, order_db):
+    @staticmethod
+    def __get_order_info(order_db):
         """We create an Order object thanks information in the database"""
+        if order_db is None:
+            raise ValueError("please enter a valid id_order")
         if order_db is not None:
             order = Order(int(order_db["supplier"]),
                           int(order_db["client"]),
@@ -81,9 +89,10 @@ class ExcelController(Resource):
                           creation_date=(order_db["creation_date"]),
                           id_order=int(order_db["id_order"])
                           )
-        return order
+            return order
 
-    def __get_info_product(self, id_order, p):
+    @staticmethod
+    def __get_info_product(id_order, p):
         total_amount = 0
         product = Product(int(id_order),
                           str(p["reference"]),
@@ -97,7 +106,8 @@ class ExcelController(Resource):
 
         return product, total_amount
 
-    def __get_partner_info(self, partner_db):
+    @staticmethod
+    def __get_partner_info(partner_db):
         partner = Partner(str(partner_db["partner_type"]),
                           str(partner_db["company"]), id_partner=int(partner_db["id_partner"]))
         return partner
