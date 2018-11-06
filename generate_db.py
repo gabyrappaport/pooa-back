@@ -146,7 +146,7 @@ for partner in partners:
     cursor.execute("INSERT INTO Partners VALUES(?,?,?)", partner)
 
 for order in orders_list:
-    cursor.execute("INSERT INTO Orders VALUES (?,?,?,?,?,?,?,?,?,?,?, ?, ?)", order)
+    cursor.execute("INSERT INTO Orders VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", order)
 
 for shipment in Shipments:
     cursor.execute("INSERT INTO Shipments VALUES (?,?,?,?,?)", shipment)

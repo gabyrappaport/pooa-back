@@ -55,6 +55,8 @@ class ShipmentDataBase:
                            "departure_location,"
                            "arrival_location)"
                            "VALUES (?,?,?,?)", values)
+            id_shipment = Database.query("SELECT last_insert_rowid() FROM Shipments").fetchone()
+            return id_shipment[0]
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 

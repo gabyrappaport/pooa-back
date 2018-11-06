@@ -90,55 +90,28 @@ class OrderDataBase:
         except (ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
 
-    def supplier_income(self):
-        """Give the income from every supplier in the month"""
-        number_of_months = 8
-        try:
-            # Get suppliers id
-            partner_stats = {}
-            query_suppliers = Database.query("SELECT id_partner FROM Partners "
-                                             "WHERE partner_type = 'supplier'")
-            for row in query_suppliers:
-                partner_stats[str(row[0])] = [0] * number_of_months
-            twelve_month_ago = datetime.today() - relativedelta(months=number_of_months-1)
-            months = [(twelve_month_ago + relativedelta(months=i)).strftime('%m/%Y') for i in range(number_of_months)]
-            for i in months:
-                values = (i[0:2], i[3:7])  # month and year
-                query_income = Database.query("SELECT id_supplier, SUM(total_amount) "
-                                              "FROM Orders, Partners "
-                                              "WHERE Orders.id_supplier = Partners.id_partner "
-                                              "AND strftime('%m', creation_date) = ?"
-                                              "AND strftime('%Y', creation_date) = ? "
-                                              "GROUP BY id_partner",
-                                              values)
-                for row in query_income:
-                    partner_stats[str(row[0])][months.index(i)] = row[1]
-            print(partner_stats)
-            return {"months": months, "partner_stats": partner_stats}
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
-
-    def client_income(self):
+    def partner_income(self, partner_type):
         number_of_months = 8
         """Give the income from every client in the month"""
         try:
             # Get clients id
             partner_stats = {}
-            query_clients = Database.query("SELECT id_partner FROM Partners "
-                                           "WHERE partner_type = 'client'")
-            for row in query_clients:
+            query_partner = Database.query("SELECT id_partner FROM Partners "
+                                           "WHERE partner_type = ?", (partner_type,))
+            for row in query_partner:
                 partner_stats[str(row[0])] = [0] * number_of_months
-            twelve_month_ago = datetime.today() - relativedelta(months=number_of_months-1)
+            twelve_month_ago = datetime.today() - relativedelta(months=number_of_months - 1)
             months = [(twelve_month_ago + relativedelta(months=i)).strftime('%m/%Y') for i in range(number_of_months)]
             for i in months:
                 values = (i[0:2], i[3:7])  # month and year
-                query_income = Database.query("SELECT id_client, SUM(total_amount) "
-                                              "FROM Orders, Partners "
-                                              "WHERE Orders.id_client = Partners.id_partner "
-                                              "AND strftime('%m', creation_date) = ?"
-                                              "AND strftime('%Y', creation_date) = ? "
-                                              "GROUP BY id_partner",
-                                              values)
+                sql = "SELECT id_partner, SUM(total_amount) " + \
+                      "FROM Orders, Partners " + \
+                      "WHERE Orders.id_" + str(partner_type) + "= Partners.id_partner " + \
+                      "AND strftime('%m', creation_date) = ? " + \
+                      "AND strftime('%Y', creation_date) = ? " + \
+                      "GROUP BY id_partner"
+                print(sql)
+                query_income = Database.query(sql, values)
                 for row in query_income:
                     partner_stats[str(row[0])][months.index(i)] = row[1]
             print(partner_stats)
@@ -146,22 +119,24 @@ class OrderDataBase:
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError("Wrong type value", e)
 
-    def delete_order(self, id_order):
-        """Delete order with its id"""
-        Database.query("DELETE from Orders "
-                       "WHERE id_order = ?", (id_order,))
 
-    def __list_to_dic_order(self, order):
-        return {"id_order": order[0],
-                "id_supplier": order[1],
-                "id_client": order[2],
-                "expected_delivery_date": order[3],
-                "payment_type": order[4],
-                "l_dips": order[5],
-                "appro_ship_sample": order[6],
-                "appro_s_off": order[7],
-                "ship_sample_2h": order[8],
-                "total_amount": order[9],
-                "creation_date": order[10],
-                "complete_delivery_date": order[11],
-                "complete_payment_date": order[12]}
+def delete_order(self, id_order):
+    """Delete order with its id"""
+    Database.query("DELETE from Orders "
+                   "WHERE id_order = ?", (id_order,))
+
+
+def __list_to_dic_order(self, order):
+    return {"id_order": order[0],
+            "id_supplier": order[1],
+            "id_client": order[2],
+            "expected_delivery_date": order[3],
+            "payment_type": order[4],
+            "l_dips": order[5],
+            "appro_ship_sample": order[6],
+            "appro_s_off": order[7],
+            "ship_sample_2h": order[8],
+            "total_amount": order[9],
+            "creation_date": order[10],
+            "complete_delivery_date": order[11],
+            "complete_payment_date": order[12]}
