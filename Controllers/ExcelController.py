@@ -52,11 +52,11 @@ class ExcelController(Resource):
             # We have now all the information we need about the specific order
 
             """Second part of the function : recovery of client data"""
-            client_db = self.partner_db.get_partner(int(order_db["client"]))
+            client_db = self.partner_db.get_partner(int(order_db["id_client"]))
             client = ExcelController.__get_partner_info(client_db)
 
             """Third part of the function : recovery of supplier data"""
-            supplier_db = self.partner_db.get_partner(int(order_db["supplier"]))
+            supplier_db = self.partner_db.get_partner(int(order_db["id_supplier"]))
             supplier = ExcelController.__get_partner_info(supplier_db)
 
             """Fourth part of the function :information about the excel file"""
@@ -77,8 +77,8 @@ class ExcelController(Resource):
         if order_db is None:
             raise ValueError("please enter a valid id_order")
         if order_db is not None:
-            order = Order(int(order_db["supplier"]),
-                          int(order_db["client"]),
+            order = Order(int(order_db["id_supplier"]),
+                          int(order_db["id_client"]),
                           str(order_db["expected_delivery_date"]),
                           str(order_db["payment_type"]),
                           str(order_db["l_dips"]),

@@ -110,7 +110,6 @@ class OrderController(Resource):
         return total_amount
 
     def __order_from_data(self, data):
-        print(data)
         order = Order(int(data["id_supplier"]),
                       int(data["id_client"]),
                       datetime.datetime.strptime(data["expected_delivery_date"], "%Y-%m-%d").date(),
