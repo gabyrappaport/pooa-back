@@ -47,10 +47,10 @@ class ProductDatabase:
         elif len(products_in_order) == 0:
             Database.query("DELETE FROM Products WHERE id_order = ?", (id_order,))
         elif len(products_in_order) > 1:
+            str = '(' + ','.join(['?' for i in products_in_order]) + ')'
             Database.query("DELETE FROM Products "
-                           "WHERE id_order = ? "
-                           "AND id_product NOT IN ?",
-                           (id_order, tuple(products_in_order)))
+                           "WHERE id_order = ? AND id_product NOT IN " + str,
+                           (id_order, *products_in_order))
 
     def get_products(self, id_order):
         """Give the list of products in the order with its id"""
@@ -63,8 +63,6 @@ class ProductDatabase:
         return result
 
     def get_products_from_id_shipment(self, id_shipment):
-        print("BOOO")
-        print(id_shipment)
         try:
             query_product_from_ship = Database.query("SELECT * FROM Products WHERE id_shipment=?", (id_shipment,))
             result = []
