@@ -114,7 +114,7 @@ class PartnerDataBase:
         try:
             values = (partner.get_partner_type(),
                       partner.get_company(),
-                      partner.id_partner())
+                      partner.get_id_partner())
             Database.query("UPDATE Partners SET partner_type = ?, company = ? WHERE id_partner = ? ", values)
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
