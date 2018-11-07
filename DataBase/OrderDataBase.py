@@ -121,23 +121,23 @@ class OrderDataBase:
             raise WritingDataBaseError("Wrong type value", e)
 
 
-def delete_order(self, id_order):
-    """Delete order with its id"""
-    Database.query("DELETE from Orders "
-                   "WHERE id_order = ?", (id_order,))
+    def delete_order(self, id_order):
+        """Delete order with its id"""
+        Database.query("DELETE from Orders "
+                       "WHERE id_order = ?", (id_order,))
 
 
-def __list_to_dic_order(self, order):
-    return {"id_order": order[0],
-            "id_supplier": order[1],
-            "id_client": order[2],
-            "expected_delivery_date": order[3],
-            "payment_type": order[4],
-            "l_dips": order[5],
-            "appro_ship_sample": order[6],
-            "appro_s_off": order[7],
-            "ship_sample_2h": order[8],
-            "total_amount": order[9],
-            "creation_date": order[10],
-            "complete_delivery_date": order[11],
-            "complete_payment_date": order[12]}
+    def __list_to_dic_order(self, order):
+        return {"id_order": order[0],
+                "id_supplier": order[1],
+                "id_client": order[2],
+                "expected_delivery_date": order[3],
+                "payment_type": order[4],
+                "l_dips": order[5],
+                "appro_ship_sample": order[6],
+                "appro_s_off": order[7],
+                "ship_sample_2h": order[8],
+                "total_amount": order[9],
+                "creation_date": order[10],
+                "complete_delivery_date": order[11],
+                "complete_payment_date": order[12]}

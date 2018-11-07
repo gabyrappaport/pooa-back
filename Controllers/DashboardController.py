@@ -5,6 +5,12 @@ from flask_restful import Resource
 from Controllers.Helper.HttpResponse import HttpResponse, HttpStatus
 from DataBase.OrderDataBase import *
 
+""" 
+REST API for Dashboard.
+
+It is used to retrieves datas on the dollar amount brought by customers and suppliers per month.
+"""
+
 
 class DashboardController(Resource):
 
@@ -12,15 +18,9 @@ class DashboardController(Resource):
         self.order_db = OrderDataBase()
 
     def get(self):
-        """Using Resource forces us to create REST APIs with only one GET"""
         try:
-            if request.args.get("partner_type") == 'client':
-                data = self.order_db.partner_income('client')
-                return HttpResponse(HttpStatus.OK,
-                                    data=data).get_response()
-            elif request.args.get("partner_type") == 'supplier':
-                data = self.order_db.partner_income('supplier')
-                return HttpResponse(HttpStatus.OK,
-                                    data=data).get_response()
-        except (werkzeug.exceptions.BadRequest) as e:
+            data = self.order_db.partner_income(request.args.get("partner_type"))
+            return HttpResponse(HttpStatus.OK,
+                                data=data).get_response()
+        except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()

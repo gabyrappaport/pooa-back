@@ -3,7 +3,6 @@ import os
 from flask import request, send_from_directory
 from flask_restful import Resource
 
-# from Models.Shipment import Shipment
 from Controllers.Helper.GenerateExcel import GenerateExcel
 from DataBase.OrderDataBase import *
 from DataBase.PartnerDataBase import PartnerDataBase
@@ -39,8 +38,8 @@ class ExcelController(Resource):
                     products = []
                     # We create a Product object thanks to information in order_db
                     for p in order_db["products"]:
-                        product, amount_product = ExcelController.__get_info_product(id_order, p)
-                        total_amount += amount_product
+                        product = ExcelController.__get_info_product(id_order, p)
+                        total_amount += product.get_price_per_product()
                         products.append(product)
                 else:
                     raise ValueError("there isn't any product in your order")
@@ -77,7 +76,7 @@ class ExcelController(Resource):
         if order_db is None:
             raise ValueError("please enter a valid id_order")
         if order_db is not None:
-            order = Order(int(order_db["id_supplier"]),
+            return Order(int(order_db["id_supplier"]),
                           int(order_db["id_client"]),
                           str(order_db["expected_delivery_date"]),
                           str(order_db["payment_type"]),
@@ -87,27 +86,20 @@ class ExcelController(Resource):
                           str(order_db["ship_sample_2h"]),
                           total_amount=str(order_db["total_amount"]),
                           creation_date=(order_db["creation_date"]),
-                          id_order=int(order_db["id_order"])
-                          )
-            return order
+                          id_order=int(order_db["id_order"]))
 
     @staticmethod
     def __get_info_product(id_order, p):
-        total_amount = 0
-        product = Product(int(id_order),
-                          str(p["reference"]),
-                          str(p["color"]),
-                          float(p["meter"]),
-                          float(p["price"]),
-                          float(p["commission"]),
-                          id_product=p["id_product"])
-        # We compute the total amount of each product that we want to display on the excel file
-        total_amount += float(p["price"]) * float(p["meter"])
-
-        return product, total_amount
+        return Product(int(id_order),
+                       str(p["reference"]),
+                       str(p["color"]),
+                       float(p["meter"]),
+                       float(p["price"]),
+                       float(p["commission"]),
+                       id_product=p["id_product"])
 
     @staticmethod
     def __get_partner_info(partner_db):
-        partner = Partner(str(partner_db["partner_type"]),
-                          str(partner_db["company"]), id_partner=int(partner_db["id_partner"]))
-        return partner
+        return Partner(str(partner_db["partner_type"]),
+                       str(partner_db["company"]),
+                       id_partner=int(partner_db["id_partner"]))

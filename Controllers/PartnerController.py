@@ -30,17 +30,43 @@ class PartnerController(Resource):
         try:
             if request.args.get("id_partner"):
                 return self.__get_partner_by_id(request.args.get("id_partner"))
-
             elif request.args.get("partner_type"):
                 return self.__get_partners_by_type(request.args.get("partner_type"))
-
             elif request.args.get("unpaid"):
                 return self.__get_nbr_unpaid_order_by_partner()
-
             elif request.args.get("undelivered"):
                 return self.__get_nbr_undelivered_order_by_partner()
             else:
                 return self.__get_all_partners()
+        except (werkzeug.exceptions.BadRequest, ValueError) as e:
+            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+
+    def post(self):
+        try:
+            data = request.get_json(force=True)
+            partner = Partner(str(data["partner_type"]),
+                              str(data["company"]))
+            self.partner_db.add_partner(partner)
+            return HttpResponse(HttpStatus.OK).get_response()
+        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+
+    def put(self):
+        try:
+            data = request.get_json(force=True)
+            partner = Partner(str(data["partner_type"]),
+                              str(data["company"]),
+                              id_partner=int(data["id_partner"]))
+            self.partner_db.update_partner(partner)
+            return HttpResponse(HttpStatus.OK).get_response()
+        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+
+    def delete(self):
+        try:
+            id_partner = request.args.get("id_partner")
+            self.partner_db.delete_partner(id_partner)
+            return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
@@ -71,32 +97,3 @@ class PartnerController(Resource):
     def __get_nbr_undelivered_order_by_partner(self):
         return HttpResponse(HttpStatus.OK,
                             data=self.partner_db.get_nbr_undelivered_order_by_partner()).get_response()
-
-    def post(self):
-        try:
-            data = request.get_json(force=True)
-            partner = Partner(str(data["partner_type"]),
-                              str(data["company"]))
-            self.partner_db.add_partner(partner)
-            return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
-
-    def put(self):
-        try:
-            data = request.get_json(force=True)
-            partner = Partner(str(data["partner_type"]),
-                              str(data["company"]),
-                              id_partner=int(data["id_partner"]))
-            self.partner_db.update_partner(partner)
-            return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
-
-    def delete(self):
-        try:
-            id_partner = request.args.get("id_partner")
-            self.partner_db.delete_partner(id_partner)
-            return HttpResponse(HttpStatus.OK).get_response()
-        except (werkzeug.exceptions.BadRequest, ValueError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()

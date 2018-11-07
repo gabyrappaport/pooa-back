@@ -16,13 +16,11 @@ class Product(ExcelModel):
 
     def print_to_cell(self, worksheet, cell):
         worksheet[str(cell[0])] = self.__id_product
-        #worksheet[str(cell[1])] = self.__id_order
         worksheet[str(cell[2])] = self.__reference
         worksheet[str(cell[3])] = self.__color
         worksheet[str(cell[4])] = self.__meter
         worksheet[str(cell[5])] = self.__price
         worksheet[str(cell[6])] = self.get_price_per_product()
-        #worksheet[:qstr(cell[7])] = self.__id_shipment
 
     def get_price_per_product(self):
         return self.__price * self.__meter

@@ -12,6 +12,9 @@ class Shipment:
     def get_id_shipment(self):
         return self.__id_shipment
 
+    def set_id_shipment(self, id_shipment):
+        self.__id_shipment = id_shipment
+
     def get_expedition_date(self):
         return self.__expedition_date
 

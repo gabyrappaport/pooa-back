@@ -34,7 +34,7 @@ class OrderController(Resource):
                 return self.__get_order_by_id(request.args.get("id_order"))
             else:
                 return self.__get_all_orders()
-        except (werkzeug.exceptions.BadRequest) as e:
+        except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def post(self):
