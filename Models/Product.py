@@ -5,6 +5,16 @@ class Product(ExcelModel):
 
     def __init__(self, id_order, reference, color, meter, price, commission, id_shipment=None, id_product=None):
         ExcelModel.__init__(self)
+
+        if not isinstance(color, str):
+            raise TypeError("Color must be a string")
+        if not isinstance(meter, float):
+            raise TypeError("Meter must be a number")
+        if not isinstance(price, float):
+            raise TypeError("Price must be a number")
+        if not isinstance(commission, int):
+            raise TypeError("Commission must be a number")
+
         self.__id_product = id_product
         self.__id_order = id_order
         self.__id_shipment = id_shipment

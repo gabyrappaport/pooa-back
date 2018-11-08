@@ -19,12 +19,12 @@ source .venv/bin/activate
 Installer les librairies python :
 
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 Générer la base de données et lancer l'application
 ```
-python generate_db.py
-python run.py
+python3 generate_db.py
+python3 run.py
 ```
 Aller sur l'application [ici](http://127.0.0.1:5000/)
 
