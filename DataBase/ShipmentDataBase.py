@@ -45,10 +45,10 @@ class ShipmentDataBase:
 
     def add_shipment(self, shipment):
         try:
-            values = (shipment.get_expedition_date(),
-                      shipment.get_transportation(),
-                      shipment.get_departure_location(),
-                      shipment.get_arrival_location())
+            values = (shipment.expedition_date,
+                      shipment.transportation,
+                      shipment.departure_location,
+                      shipment.get_arrival_location)
             Database.query("INSERT INTO Shipments "
                            "(expedition_date,"
                            "transportation,"
@@ -62,11 +62,11 @@ class ShipmentDataBase:
 
     def update_shipment(self, shipment):
         try:
-            values = (shipment.get_expedition_date(),
-                      shipment.get_transportation(),
-                      shipment.get_departure_location(),
-                      shipment.get_arrival_location(),
-                      shipment.get_id_shipment())
+            values = (shipment.expedition_date,
+                      shipment.transportation,
+                      shipment.departure_location,
+                      shipment.get_arrival_location,
+                      shipment.id_shipment)
             Database.query("UPDATE Shipments "
                            "SET expedition_date = ?,"
                            "transportation = ?,"

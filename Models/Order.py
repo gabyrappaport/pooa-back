@@ -57,86 +57,74 @@ class Order(ExcelModel):
                 p.print_to_cell(worksheet, cell[iter_products])
                 i += 1
 
-    def get_id_order(self):
+    def _get_id_order(self):
         return self.__id_order
 
-    def set_id_order(self, id_order):
+    def _set_id_order(self, id_order):
         self.__id_order = id_order
 
-    def get_id_supplier(self):
+    def _get_id_supplier(self):
         return self.__supplier
 
-    def set_id_supplier(self, supplier):
-        self.__supplier = supplier
-
-    def get_id_client(self):
+    def _get_id_client(self):
         return self.__client
 
-    def set_id_client(self, client):
-        self.__client = client
-
-    def get_expected_delivery_date(self):
+    def _get_expected_delivery_date(self):
         return self.__expected_delivery_date
 
-    def set_expected_delivery_date(self, expected_delivery_date):
-        self.__expected_delivery_date = expected_delivery_date
-
-    def get_products(self):
+    def _get_products(self):
         return self.__products
 
-    def set_products(self, products):
+    def _set_products(self, products):
         self.__products = products
 
-    def get_payment_type(self):
+    def _get_payment_type(self):
         return self.__payment_type
 
-    def set_payment_type(self, payment_type):
-        self.__payment_type = payment_type
-
-    def get_creation_date(self):
+    def _get_creation_date(self):
         return self.__creation_date
 
-    def set_creation_date(self, creation_date):
-        self.__creation_date = creation_date
-
-    def get_l_dips(self):
+    def _get_l_dips(self):
         return self.__l_dips
 
-    def set_l_dips(self, l_dips):
-        self.__l_dips = l_dips
-
-    def get_appro_ship_sample(self):
+    def _get_appro_ship_sample(self):
         return self.__appro_ship_sample
 
-    def set_appro_ship_sample(self, appro_ship_sample):
-        self.__appro_ship_sample = appro_ship_sample
-
-    def get_appro_s_off(self):
+    def _get_appro_s_off(self):
         return self.__appro_s_off
 
-    def set_appro_s_off(self, appro_s_off):
-        self.__appro_s_off = appro_s_off
-
-    def get_ship_sample_2h(self):
+    def _get_ship_sample_2h(self):
         return self.__ship_sample_2h
 
-    def set_ship_sample_2h(self, ship_sample_2h):
-        self.__ship_sample_2h = ship_sample_2h
-
-    def get_total_amount(self):
+    def _get_total_amount(self):
         return self.__total_amount
 
-    def set_total_amount(self, total_amount):
+    def _set_total_amount(self, total_amount):
         self.__total_amount = total_amount
 
-    def get_complete_delivery_date(self):
+    def _get_complete_delivery_date(self):
         return self.__complete_delivery_date
 
-    def set_complete_delivery_date(self, complete_delivery_date):
+    def _set_complete_delivery_date(self, complete_delivery_date):
         self.__complete_delivery_date = complete_delivery_date
 
-    def get_complete_payment_date(self):
+    def _get_complete_payment_date(self):
         return self.__complete_payment_date
 
-    def set_complete_payment_date(self, complete_payment_date):
+    def _set_complete_payment_date(self, complete_payment_date):
         self.__complete_payment_date = complete_payment_date
+
+    id_order = property(_get_id_order, _set_id_order)
+    id_supplier = property(_get_id_supplier)
+    id_client = property(_get_id_client)
+    expected_delivery_date = property(_get_expected_delivery_date)
+    products = property(_get_products, _set_products)
+    payment_type = property(_get_payment_type)
+    creation_date = property(_get_creation_date)
+    l_dips = property(_get_l_dips)
+    appro_ship_sample = property(_get_appro_ship_sample)
+    appro_s_off = property(_get_appro_s_off)
+    ship_sample_2h = property(_get_ship_sample_2h)
+    total_amount = property(_get_total_amount, _set_total_amount)
+    complete_delivery_date = property(_get_complete_delivery_date, _set_complete_delivery_date)
+    complete_payment_date = property(_get_complete_payment_date, _set_complete_payment_date)

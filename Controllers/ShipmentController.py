@@ -102,7 +102,7 @@ class ShipmentController(Resource):
                                 id_shipment=int(data["id_shipment"]))
             self.shipment_db.update_shipment(shipment)
             for id_product in data["added_products"]:
-                self.product_db.set_id_shipment(id_product, shipment.get_id_shipment)
+                self.product_db.set_id_shipment(id_product, shipment.id_shipment)
             for id_product in data["removed_products"]:
                 self.product_db.delete_id_shipment(id_product)
             return HttpResponse(HttpStatus.OK).get_response()
