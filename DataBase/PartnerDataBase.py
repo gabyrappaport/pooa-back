@@ -99,8 +99,8 @@ class PartnerDataBase:
     def add_partner(self, partner):
         """Create a new partner with its company name and partner type : client or supplier"""
         try:
-            values = (partner.get_partner_type(),
-                      partner.get_company())
+            values = (partner.partner_type,
+                      partner.company)
             Database.query("INSERT INTO Partners (partner_type, company) VALUES(?,?)", values)
         except(ValueError, TypeError):
             raise WritingDataBaseError("Wrong type Value.")
@@ -112,8 +112,8 @@ class PartnerDataBase:
     def update_partner(self, partner):
         """Change the value for the object partner"""
         try:
-            values = (partner.get_partner_type(),
-                      partner.get_company(),
+            values = (partner.partner_type,
+                      partner.company,
                       partner.id_partner)
             Database.query("UPDATE Partners SET partner_type = ?, company = ? WHERE id_partner = ? ", values)
         except(ValueError, TypeError):

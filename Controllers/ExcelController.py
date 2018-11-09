@@ -47,8 +47,8 @@ class ExcelController(Resource):
             else:
                 raise ValueError("please enter a valid id_order")
             # We update this information on the order project
-            order.set_products(products)
-            order.set_total_amount(total_amount)
+            order.products = products
+            order.total_amount = total_amount
             # We have now all the information we need about the specific order
 
             """Second part of the function : recovery of client data"""
