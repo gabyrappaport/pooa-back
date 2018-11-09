@@ -5,6 +5,14 @@ class Partner(ExcelModel):
 
     def __init__(self, partner_type, company, id_partner=None):
         ExcelModel.__init__(self)
+
+        if not isinstance(partner_type, str):
+            raise TypeError("Partner type must be a string")
+        if not isinstance(company, str):
+            raise TypeError("Company must be a string")
+        if company == "":
+            raise ValueError("Enter a valid company name")
+
         self.__id_partner = id_partner
         self.__partner_type = partner_type
         self.__company = company
