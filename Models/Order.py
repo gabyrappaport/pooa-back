@@ -9,6 +9,23 @@ class Order(ExcelModel):
                  l_dips, appro_ship_sample, appro_s_off, ship_sample_2h, total_amount=0, creation_date=None,
                  id_order=None, products=None, complete_delivery_date=None, complete_payment_date=None):
         ExcelModel.__init__(self)
+
+        if not isinstance(payment_type, str):
+            raise TypeError("Payment type must be a string")
+        if not isinstance(expected_delivery_date, datetime.datetime):
+            raise TypeError("Delivery date must be a valid datetime object")
+        if not isinstance(l_dips, str):
+            raise TypeError("Lype must be a string")
+        if not isinstance(payment_type, str):
+            raise TypeError("Payment type must be a string")
+        if not isinstance(payment_type, str):
+            raise TypeError("Payment type must be a string")
+        if not isinstance(payment_type, str):
+            raise TypeError("Payment type must be a string")
+        if not isinstance(payment_type, str):
+            raise TypeError("Payment type must be a string")
+
+
         self.__id_order = id_order
         self.__supplier = id_supplier
         self.__client = id_client
