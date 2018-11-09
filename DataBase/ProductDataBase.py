@@ -16,7 +16,6 @@ class ProductDatabase:
                       float(product.meter),
                       float(product.price),
                       float(product.commission))
-            print("holaaaa")
             Database.query("INSERT INTO Products"
                            "(id_order,"
                            "reference,"

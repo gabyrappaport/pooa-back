@@ -57,7 +57,8 @@ class ShipmentController(Resource):
 
     def __get_shipment_by_id_shipment(self, id_shipment):
         shipment = self.shipment_db.get_shipment_id_shipment(id_shipment)
-        self.__set_products(shipment)
+        if shipment is not None:
+            self.__set_products(shipment)
         return HttpResponse(HttpStatus.OK,
                             data=shipment).get_response()
 

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Shipment:
 
     def __init__(self, expedition_date, transportation,
@@ -33,20 +34,11 @@ class Shipment:
     def _get_departure_location(self):
         return self.__departure_location
 
-    def get_arrival_location(self):
+    def _get_arrival_location(self):
         return self.__arrival_location
-
-    def set_arrival_location(self, arrival_location):
-        self.__arrival_location = arrival_location
-
-    def get_products(self):
-        return self.__products
-
-    def set_products(self, products):
-        self.__products = products
 
     id_shipment = property(_get_id_shipment)
     expedition_date = property(_get_expedition_date)
     transportation = property(_get_transportation)
     departure_location = property(_get_departure_location)
-    arrival_location = property()
+    arrival_location = property(_get_arrival_location)

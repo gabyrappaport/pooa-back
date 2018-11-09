@@ -42,7 +42,6 @@ class OrderController(Resource):
             # Create new order
             data = request.get_json(force=True)
             order = self.__order_from_data(data)
-            print("hi there")
             id_order = self.order_db.add_order(order)
             # Add products in new order and calculate total amount
             total_amount = 0

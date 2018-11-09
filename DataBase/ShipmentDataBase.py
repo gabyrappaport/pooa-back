@@ -31,8 +31,10 @@ class ShipmentDataBase:
         query_shipment = Database.query("SELECT * FROM Shipments WHERE id_shipment = ?",
                                         (id_shipment,))
         shipment = query_shipment.fetchone()
-        result = self.__list_to_dic_shipment(shipment)
-        return result
+        if shipment is not None:
+            return self.__list_to_dic_shipment(shipment)
+        else:
+            return shipment
 
     def get_all_shipments(self):
         """Get all shipments"""
@@ -48,7 +50,7 @@ class ShipmentDataBase:
             values = (shipment.expedition_date,
                       shipment.transportation,
                       shipment.departure_location,
-                      shipment.get_arrival_location)
+                      shipment.arrival_location)
             Database.query("INSERT INTO Shipments "
                            "(expedition_date,"
                            "transportation,"
@@ -65,7 +67,7 @@ class ShipmentDataBase:
             values = (shipment.expedition_date,
                       shipment.transportation,
                       shipment.departure_location,
-                      shipment.get_arrival_location,
+                      shipment.arrival_location,
                       shipment.id_shipment)
             Database.query("UPDATE Shipments "
                            "SET expedition_date = ?,"
