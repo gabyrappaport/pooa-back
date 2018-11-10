@@ -12,19 +12,28 @@ class Order(ExcelModel):
 
         if not isinstance(payment_type, str):
             raise TypeError("Payment type must be a string")
-        if not isinstance(expected_delivery_date, datetime.datetime):
+        if not isinstance(expected_delivery_date, datetime.date):
             raise TypeError("Delivery date must be a valid datetime object")
         if not isinstance(l_dips, str):
-            raise TypeError("Lype must be a string")
-        if not isinstance(payment_type, str):
-            raise TypeError("Payment type must be a string")
-        if not isinstance(payment_type, str):
-            raise TypeError("Payment type must be a string")
-        if not isinstance(payment_type, str):
-            raise TypeError("Payment type must be a string")
-        if not isinstance(payment_type, str):
-            raise TypeError("Payment type must be a string")
-
+            raise TypeError("Type must be a string")
+        if not isinstance(appro_ship_sample, str):
+            raise TypeError("Type must be a string")
+        if not isinstance(appro_s_off, str):
+            raise TypeError("Type must be a string")
+        if not isinstance(ship_sample_2h, str):
+            raise TypeError("Type must be a string")
+        if expected_delivery_date == "":
+            raise ValueError("Enter a valid expected_delivery_date")
+        if payment_type == "":
+            raise ValueError("Enter a valid payment_type")
+        if l_dips == "":
+            raise ValueError("Enter a valid l_dips")
+        if appro_ship_sample == "":
+            raise ValueError("Enter a valid appro_ship_sample")
+        if appro_s_off == "":
+            raise ValueError("Enter a valid appro_s_off")
+        if ship_sample_2h == "":
+            raise ValueError("Enter a valid ship_sample_2h")
 
         self.__id_order = id_order
         self.__supplier = id_supplier

@@ -51,7 +51,7 @@ class OrderController(Resource):
                 total_amount += product.get_price_with_commission()
             self.order_db.set_total_amount(total_amount, id_order)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def put(self):
@@ -62,7 +62,7 @@ class OrderController(Resource):
             order.total_amount = updated_total_amount
             self.order_db.update_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def delete(self):
@@ -94,7 +94,7 @@ class OrderController(Resource):
     def __update_products(self, id_order, products):
         products_in_order = []
         total_amount = 0
-        for p in products: # dans p il y a mon nouveau produit
+        for p in products:  # p is a new product
             product = self.__product_from_data(id_order, p)
             total_amount += product.get_price_with_commission()
             # If the product already has an id_product, it means it is already stored in the database,

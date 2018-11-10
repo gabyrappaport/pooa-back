@@ -90,7 +90,7 @@ class ShipmentController(Resource):
                 for id_product in data["products"]:
                     self.product_db.set_id_shipment(id_product, id_shipment)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def put(self):
@@ -107,7 +107,7 @@ class ShipmentController(Resource):
             for id_product in data["removed_products"]:
                 self.product_db.delete_id_shipment(id_product)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def delete(self):
