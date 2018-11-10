@@ -77,8 +77,6 @@ class ExcelController(Resource):
         if order_db is None:
             raise ValueError("please enter a valid id_order")
         if order_db is not None:
-            print (type(datetime.datetime.strptime(order_db["expected_delivery_date"], "%Y-%m-%d").date()))
-            print("good")
             order = Order(int(order_db["id_supplier"]),
                           int(order_db["id_client"]),
                           datetime.datetime.strptime(order_db["expected_delivery_date"], "%Y-%m-%d").date(),
