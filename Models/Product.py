@@ -16,6 +16,17 @@ class Product(ExcelModel):
             raise TypeError("Price must be a number")
         if not isinstance(commission, float):
             raise TypeError("Commission must be a number")
+        if reference == "":
+            raise ValueError("Enter a valid reference")
+        if color == "":
+            raise ValueError("Enter a valid color")
+        if meter == "":
+            raise ValueError("Enter a valid number of meter")
+        if price == "":
+            raise ValueError("Enter a valid price")
+        if commission == "":
+            raise ValueError("Enter a valid commission")
+
 
         self.__id_product = id_product
         self.__id_order = id_order

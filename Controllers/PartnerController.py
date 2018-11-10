@@ -90,7 +90,7 @@ class PartnerController(Resource):
                               id_partner=int(data["id_partner"]))
             self.partner_db.update_partner(partner)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def delete(self):
