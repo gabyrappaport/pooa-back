@@ -48,7 +48,7 @@ class PartnerController(Resource):
                               str(data["company"]))
             self.partner_db.add_partner(partner)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
             return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
 
     def put(self):

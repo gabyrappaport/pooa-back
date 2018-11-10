@@ -10,12 +10,12 @@ class ProductDatabase:
     def add_product(self, product):
         """Create a new product and return its id which is autoincremented in database"""
         try:
-            values = (int(product.get_id_order()),
-                      str(product.get_reference()),
-                      str(product.get_color()),
-                      float(product.get_meter()),
-                      float(product.get_price()),
-                      float(product.get_commission()))
+            values = (int(product.id_order),
+                      str(product.reference),
+                      str(product.color),
+                      float(product.meter),
+                      float(product.price),
+                      float(product.commission))
             Database.query("INSERT INTO Products"
                            "(id_order,"
                            "reference,"
@@ -25,8 +25,8 @@ class ProductDatabase:
                            "commission) "
                            "VALUES(?,?,?,?,?,?) ", values)
             id_product = Database.query("SELECT last_insert_rowid() FROM Products").fetchone()
-            if product.get_id_shipment():
-                values = (int(product.get_id_shipment()),
+            if product.id_shipment:
+                values = (int(product.id_shipment),
                           id_product)
                 Database.query("UPDATE Products "
                                "SET id_shipment = ?"
@@ -48,8 +48,7 @@ class ProductDatabase:
             Database.query("DELETE FROM Products WHERE id_order = ?", (id_order,))
         elif len(products_in_order) > 1:
             str = '(' + ','.join(['?' for i in products_in_order]) + ')'
-            Database.query("DELETE FROM Products "
-                           "WHERE id_order = ? AND id_product NOT IN " + str,
+            Database.query("DELETE FROM Products WHERE id_order = ? AND id_product NOT IN " + str,
                            (id_order, *products_in_order))
 
     def get_products(self, id_order):
@@ -75,13 +74,13 @@ class ProductDatabase:
 
     def update_product(self, product):
         try:
-            values = (int(product.get_id_order()),
-                      str(product.get_reference()),
-                      product.get_color(),
-                      product.get_meter(),
-                      int(product.get_price()),
-                      float(product.get_commission()),
-                      int(product.get_id_product()))
+            values = (int(product.id_order),
+                      str(product.reference),
+                      product.color,
+                      product.meter,
+                      float(product.price),
+                      float(product.commission),
+                      int(product.id_product))
             Database.query("UPDATE Products "
                            "SET id_order = ?,"
                            "reference = ?,"
@@ -90,9 +89,9 @@ class ProductDatabase:
                            "price = ?,"
                            "commission = ?"
                            "WHERE id_product = ?", values)
-            if product.get_id_shipment():
-                values = (int(product.get_id_shipment()),
-                          int(product.get_id_product()))
+            if product.id_shipment():
+                values = (int(product.id_shipment()),
+                          int(product.id_product()))
                 Database.query("UPDATE Products"
                                " SET id_shipment = ?"
                                "WHERE id_product = ?", values)

@@ -55,7 +55,7 @@ partners = [((1), "client", "Zara"),
             ((8), "supplier", "Seoultex"),
             ((9), "supplier", "Vietnamtex")]
 
-Shipments = [((0), ("2018-11-01"), "bateau", "Shanghai", "Le Havre"),
+shipments = [((0), ("2018-11-01"), "bateau", "Shanghai", "Le Havre"),
              ((1), ("2018-10-03"), "truck", "New Delhi", "Le Havre"),
              ((2), ("2018-12-04"), "avion", "Shanghai", "CDG"),
              ((3), ("2018-09-22"), "avion", "Shanghai", "Barcelone"),
@@ -148,7 +148,7 @@ for partner in partners:
 for order in orders_list:
     cursor.execute("INSERT INTO Orders VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", order)
 
-for shipment in Shipments:
+for shipment in shipments:
     cursor.execute("INSERT INTO Shipments VALUES (?,?,?,?,?)", shipment)
 
 for product in products:

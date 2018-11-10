@@ -5,6 +5,18 @@ class Product(ExcelModel):
 
     def __init__(self, id_order, reference, color, meter, price, commission, id_shipment=None, id_product=None):
         ExcelModel.__init__(self)
+
+        if not isinstance(reference, str):
+            raise TypeError("Reference must be a string")
+        if not isinstance(color, str):
+            raise TypeError("Color must be a string")
+        if not isinstance(meter, float):
+            raise TypeError("Meter must be a number")
+        if not isinstance(price, float):
+            raise TypeError("Price must be a number")
+        if not isinstance(commission, float):
+            raise TypeError("Commission must be a number")
+
         self.__id_product = id_product
         self.__id_order = id_order
         self.__id_shipment = id_shipment
@@ -28,51 +40,38 @@ class Product(ExcelModel):
     def get_price_with_commission(self):
         return (self.__commission / 100 * self.__price * self.__meter).__round__(2)
 
-    def get_id_product(self):
+    def _get_id_product(self):
         return self.__id_product
     
-    def set_id_product(self, id_product):
+    def _set_id_product(self, id_product):
         self.__id_product = id_product
 
-    def get_id_order(self):
+    def _get_id_order(self):
         return self.__id_order
 
-    def set_id_order(self, id_order):
-        self.__id_order = id_order
-
-    def get_id_shipment(self):
+    def _get_id_shipment(self):
         return self.__id_shipment
 
-    def set_id_shipment(self, id_shipment):
-        self.__id_shipment = id_shipment
-
-    def get_reference(self):
+    def _get_reference(self):
         return self.__reference
 
-    def set_reference(self, reference):
-        self.__reference = reference
-
-    def get_color(self):
+    def _get_color(self):
         return self.__color
 
-    def set_color(self, color):
-        self.__color = color
-
-    def get_meter(self):
+    def _get_meter(self):
         return self.__meter
 
-    def set_meter(self, meter):
-        self.__meter = meter
-
-    def get_price(self):
+    def _get_price(self):
         return self.__price
 
-    def set_price(self, price):
-        self.__price = price
-
-    def get_commission(self):
+    def _get_commission(self):
         return self.__commission
 
-    def set_commission(self, commission):
-        self.__commission = commission
-
+    id_product = property(_get_id_product, _set_id_product)
+    id_order = property(_get_id_order)
+    id_shipment = property(_get_id_shipment)
+    reference = property(_get_reference)
+    color = property(_get_color)
+    meter = property(_get_meter)
+    price = property(_get_price)
+    commission = property(_get_commission)

@@ -31,16 +31,16 @@ class OrderDataBase:
     def add_order(self, order):
         """Create a new order and return its id which is autoincremented in database"""
         try:
-            values = (int(order.get_id_supplier()),
-                      int(order.get_id_client()),
-                      order.get_expected_delivery_date(),
-                      order.get_payment_type(),
-                      order.get_l_dips(),
-                      order.get_appro_ship_sample(),
-                      order.get_appro_s_off(),
-                      order.get_ship_sample_2h(),
-                      order.get_total_amount(),
-                      order.get_creation_date())
+            values = (int(order.id_supplier),
+                      int(order.id_client),
+                      order.expected_delivery_date,
+                      order.payment_type,
+                      order.l_dips,
+                      order.appro_ship_sample,
+                      order.appro_s_off,
+                      order.ship_sample_2h,
+                      order.total_amount,
+                      order.creation_date)
             Database.query("INSERT INTO Orders "
                            "(id_supplier, id_client, expected_delivery_date,"
                            "payment_type, l_dips, appro_ship_sample, appro_s_off,"
@@ -53,18 +53,18 @@ class OrderDataBase:
 
     def update_order(self, order):
         try:
-            values = (int(order.get_id_supplier()),
-                      int(order.get_id_client()),
-                      order.get_expected_delivery_date(),
-                      order.get_payment_type(),
-                      order.get_l_dips(),
-                      order.get_appro_ship_sample(),
-                      order.get_appro_s_off(),
-                      order.get_ship_sample_2h(),
-                      order.get_total_amount(),
-                      order.get_complete_delivery_date(),
-                      order.get_complete_payment_date(),
-                      int(order.get_id_order()))
+            values = (int(order.id_supplier),
+                      int(order.id_client),
+                      order.expected_delivery_date,
+                      order.payment_type,
+                      order.l_dips,
+                      order.appro_ship_sample,
+                      order.appro_s_off,
+                      order.ship_sample_2h,
+                      order.total_amount,
+                      order.complete_delivery_date,
+                      order.complete_payment_date,
+                      int(order.id_order))
             Database.query("UPDATE Orders "
                            "SET id_supplier = ?,"
                            "id_client = ?,"

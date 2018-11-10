@@ -58,8 +58,8 @@ class OrderController(Resource):
         try:
             data = request.get_json(force=True)
             order = self.__order_from_data(data)
-            updated_total_amount = self.__update_products(order.get_id_order(), data["products"])
-            order.set_total_amount(updated_total_amount)
+            updated_total_amount = self.__update_products(order.id_order, data["products"])
+            order.total_amount = updated_total_amount
             self.order_db.update_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
@@ -104,8 +104,8 @@ class OrderController(Resource):
             # If the product doesn't have an id_product, it means it is a new product in the database,
             # so we need to add it.
             else:
-                product.set_id_product(self.product_db.add_product(product))
-            products_in_order.append(product.get_id_product())
+                product.id_product = self.product_db.add_product(product)
+            products_in_order.append(product.id_product)
         self.product_db.delete_old_products(id_order, products_in_order)
         return total_amount
 
@@ -119,16 +119,15 @@ class OrderController(Resource):
                       str(data["appro_s_off"]),
                       str(data["ship_sample_2h"]))
         if "id_order" in data.keys():
-            order.set_id_order(data["id_order"])
+            order.id_order = data["id_order"]
         if "complete_payment_date" in data.keys() and data["complete_payment_date"] != -1:
-            order.set_complete_payment_date(
-                datetime.datetime.strptime(data["complete_payment_date"], "%Y-%m-%d").date())
+            order.complete_payment_date = datetime.datetime.strptime(data["complete_payment_date"], "%Y-%m-%d").date()
         if "complete_delivery_date" in data.keys() and data["complete_delivery_date"] != -1:
-            order.set_complete_delivery_date(
-                datetime.datetime.strptime(data["complete_delivery_date"], "%Y-%m-%d").date())
+            order.complete_delivery_date = datetime.datetime.strptime(data["complete_delivery_date"], "%Y-%m-%d").date()
         return order
 
     def __product_from_data(self, id_order, data_product):
+        print(float(data_product["commission"]))
         product = Product(int(id_order),
                           str(data_product["reference"]),
                           str(data_product["color"]),
@@ -136,5 +135,5 @@ class OrderController(Resource):
                           float(data_product["price"]),
                           float(data_product["commission"]))
         if "id_product" in data_product.keys():
-            product.set_id_product(data_product["id_product"])
+            product.id_product = data_product["id_product"]
         return product

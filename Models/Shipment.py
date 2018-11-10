@@ -1,7 +1,20 @@
+from datetime import datetime
+
+
 class Shipment:
 
     def __init__(self, expedition_date, transportation,
                  departure_location, arrival_location, products=None, id_shipment=None):
+
+        if not isinstance(expedition_date, datetime):
+            raise TypeError("Expedition date must be a valid datetime object")
+        if not isinstance(transportation, str):
+            raise TypeError("Transportation must be a string")
+        if not isinstance(departure_location, str):
+            raise TypeError("Departure location must be a string")
+        if not isinstance(arrival_location, str):
+            raise TypeError("Arrival location must be a string")
+
         self.__id_shipment = id_shipment
         self.__expedition_date = expedition_date
         self.__transportation = transportation
@@ -9,40 +22,23 @@ class Shipment:
         self.__arrival_location = arrival_location
         self.__products = products
 
-    def get_id_shipment(self):
+    def _get_id_shipment(self):
         return self.__id_shipment
 
-    def set_id_shipment(self, id_shipment):
-        self.__id_shipment = id_shipment
-
-    def get_expedition_date(self):
+    def _get_expedition_date(self):
         return self.__expedition_date
 
-    def set_expedition_date(self, expedition_date):
-        self.__expedition_date = expedition_date
-
-    def get_transportation(self):
+    def _get_transportation(self):
         return self.__transportation
 
-    def set_transportation(self, transportation):
-        self.__transportation = transportation
-
-    def get_departure_location(self):
+    def _get_departure_location(self):
         return self.__departure_location
 
-    def set_departure_location(self, departure_location):
-        self.__departure_location = departure_location
-
-    def get_arrival_location(self):
+    def _get_arrival_location(self):
         return self.__arrival_location
 
-    def set_arrival_location(self, arrival_location):
-        self.__arrival_location = arrival_location
-
-    def get_products(self):
-        return self.__products
-
-    def set_products(self, products):
-        self.__products = products
-
-
+    id_shipment = property(_get_id_shipment)
+    expedition_date = property(_get_expedition_date)
+    transportation = property(_get_transportation)
+    departure_location = property(_get_departure_location)
+    arrival_location = property(_get_arrival_location)
