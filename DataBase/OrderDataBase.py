@@ -24,7 +24,6 @@ class OrderDataBase:
                                      (id_order,))
         order = query_order.fetchone()
         if order is not None:
-            print(order)
             return self.__list_to_dic_order(order)
         else:
             return order
@@ -111,11 +110,9 @@ class OrderDataBase:
                       "AND strftime('%m', creation_date) = ? " + \
                       "AND strftime('%Y', creation_date) = ? " + \
                       "GROUP BY id_partner"
-                print(sql)
                 query_income = Database.query(sql, values)
                 for row in query_income:
                     partner_stats[str(row[0])][months.index(i)] = row[1]
-            print(partner_stats)
             return {"months": months, "partner_stats": partner_stats}
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError("Wrong type value", e)
