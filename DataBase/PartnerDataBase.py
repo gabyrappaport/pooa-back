@@ -118,6 +118,14 @@ class PartnerDataBase:
         except(ValueError, TypeError) as e:
             raise WritingDataBaseError(str(e))
 
+    def get_partner_ids(self, partner_type, months):
+        partners = {}
+        query_partner = Database.query("SELECT id_partner FROM Partners "
+                                       "WHERE partner_type = ?", (partner_type,))
+        for row in query_partner:
+            partners[str(row[0])] = [0] * months
+        return partners
+
     def __list_to_dic_partner(self, partner):
         return {"id_partner": partner[0],
                 "partner_type": partner[1],

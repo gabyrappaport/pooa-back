@@ -89,15 +89,15 @@ class OrderDataBase:
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError(str(e))
 
-    def partner_income(self, partner_type, months):
+    def partner_income(self, partner_type, months, partners):
         """Give the income from every client in the month"""
         try:
-            # Get clients id
-            partner_stats = {}
-            query_partner = Database.query("SELECT id_partner FROM Partners "
-                                           "WHERE partner_type = ?", (partner_type,))
-            for row in query_partner:
-                partner_stats[str(row[0])] = [0] * len(months)
+            # # Get clients id
+            # partner_stats = {}
+            # query_partner = Database.query("SELECT id_partner FROM Partners "
+            #                                "WHERE partner_type = ?", (partner_type,))
+            # for row in query_partner:
+            #     partner_stats[str(row[0])] = [0] * len(months)
             for i in months:
                 values = (i[0:2], i[3:7])  # month and year
                 sql = "SELECT id_partner, SUM(total_amount) " + \
@@ -108,8 +108,8 @@ class OrderDataBase:
                       "GROUP BY id_partner"
                 query_income = Database.query(sql, values)
                 for row in query_income:
-                    partner_stats[str(row[0])][months.index(i)] = row[1]
-            return partner_stats
+                    partners[str(row[0])][months.index(i)] = row[1]
+            return partners
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError(str(e))
 
