@@ -90,7 +90,7 @@ d'implémentation de l'application et contient **4 tables** contenant les ordres
     generate_db.py
     itn.db
     README.md
-    requierements.txt
+    requirements.txt
     run.py
 ```
 
