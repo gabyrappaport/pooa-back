@@ -4,35 +4,34 @@ _**Projet réalisé pour le cours de POOA par Gabrielle Rappaport, Alix Mallard 
 
 ### Installation
 
-1. Rendez-vous dans le dossiers où vous avez télécharger notre fichier zip.
+1. Rendez-vous dans le dossiers où vous avez télécharger notre fichier _zip_.
 
-Si vous n'avez pas _virtualenv,_ faire:
-```
-pip3 install virtualenv
-```
-Créer un dossier d'environnement virtuel:
-```
-virtualenv -p python3 .venv
-```
-Activer l'environnement virtuel:
+    Si vous n'avez pas _virtualenv,_ faire:
+    ```
+    pip3 install virtualenv
+    ```
+2. Créer un dossier d'environnement virtuel:
+    ```
+    virtualenv -p python3 .venv
+    ```
+3. Activer l'environnement virtuel:
 
-**SUR LINUX** : ```source .venv/bin/activate ```
+    **SUR LINUX** : ```source .venv/bin/activate ```
 
-**SUR WINDOWS** : ```.venv\Scripts\activate```
+    **SUR WINDOWS** : ```.venv\Scripts\activate```
 
-Installer les librairies python :
+4. Installer les librairies python :
+    ```
+    pip3 install -r requirements.txt
+    ```
+5. Générer la base de données et lancer l'application
+    ```
+    python3 generate_db.py
+    python3 run.py
+    ```
+6. Aller sur l'application [ici](http://127.0.0.1:5000/) _(http://127.0.0.1:5000/)_
 
-```
-pip3 install -r requirements.txt
-```
-Générer la base de données et lancer l'application
-```
-python3 generate_db.py
-python3 run.py
-```
-Aller sur l'application [ici](http://127.0.0.1:5000/) _(http://127.0.0.1:5000/)_
-
-Pour quitter l'environnement faites ```deactivate```.
+7. Pour quitter l'environnement faites ```deactivate```.
 
 ### Applications
 Cette application permet de gérer des ordres.
@@ -73,7 +72,7 @@ Le front a été conçu avec un framework Angular.
 
 Notre base de données est en SQLite car légère et correspondant à nos attentes quant à la facilité 
 d'implémentation de l'application et contient **4 tables** contenant les ordres, partnenaires, expéditions et produits.
-(voir Annexe à la fin). Flask + Angular
+(voir Annexe à la fin). Nous avons utilisé flask dans le back et Angular dans le front. 
 
 ### Les différents fichiers
 
