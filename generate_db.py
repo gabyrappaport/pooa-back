@@ -2,7 +2,7 @@ import os
 import sqlite3
 
 if os.path.exists("itn.db"):
-    os.remove("itn.db")  # à enlever
+    os.remove("itn.db")
 conn = sqlite3.connect("itn.db")
 
 cursor = conn.cursor()

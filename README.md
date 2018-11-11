@@ -4,9 +4,9 @@ _**Projet réalisé pour le cours de POOA par Gabrielle Rappaport, Alix Mallard 
 
 ### Installation
 
-1. Rendez-vous dans le dossiers où vous avez télécharger notre fichier _zip_.
+1. Rendez-vous dans le dossiers où vous avez téléchargé notre fichier _zip_.
 
-    Si vous n'avez pas _virtualenv,_ faire:
+    Si vous n'avez pas _virtualenv,_ faire dans un terminal:
     ```
     pip3 install virtualenv
     ```
@@ -35,13 +35,14 @@ _**Projet réalisé pour le cours de POOA par Gabrielle Rappaport, Alix Mallard 
 
 ### Applications
 Cette application permet de gérer des ordres.
-Un ordre est un ensemble d'informations correspondants à une commande de produits pour un client et commandée à un fournisseur. Chaque ordre est livré par une ou plusieures livraisons.
+Un ordre est un ensemble d'informations correspondants à une commande de produits pour un client et commandée à un 
+fournisseur. Chaque ordre est livré par une ou plusieures livraisons.
 
 ### Comment utiliser l'application ?
 Vous arrivez sur la page de login, cliquez directement sur `Connexion` pour accéder à l'application.
 
 1. L'onglet _Nouvel Ordre_ permet d'ajouter une nouvelle commande avec les produits qu'elle
-contient et leur informations, le nom du client et celui du fournisseur
+contient et leurs informations, le nom du client et celui du fournisseur
 ainsi que les informations liées à la commande et caractéristiques à l'entreprise
 
 2. L'onglet _Ordres_ présente le récapitulatif des ordres. Vous pouvez télécharger un excel récapitulatif de l'ordre à envoyer à vos fournisseurs
@@ -72,7 +73,7 @@ Le front a été conçu avec un framework Angular.
 
 Notre base de données est en SQLite car légère et correspondant à nos attentes quant à la facilité 
 d'implémentation de l'application et contient **4 tables** contenant les ordres, partnenaires, expéditions et produits.
-(voir Annexe à la fin).  Nous avons utilisé flask dans le back et Angular dans le front.
+(voir Annexe à la fin).
 
 ### Les différents fichiers
 
