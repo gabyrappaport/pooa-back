@@ -34,8 +34,8 @@ class ExcelController(Resource):
 
                 """ Recovery of products order and total amount."""
                 products, total_amount = self.__get_products_info_and_total_amount(id_order)
-                order.set_products(products)
-                order.set_total_amount(total_amount)
+                order.products = products
+                order.total_amount = total_amount
 
                 """Recovery of order's client data."""
                 client_data = self.partner_db.get_partner(int(order_data["id_client"]))
@@ -74,7 +74,7 @@ class ExcelController(Resource):
         """We create an Order object thanks information in the database"""
         return Order(int(order_data["id_supplier"]),
                      int(order_data["id_client"]),
-                     str(order_data["expected_delivery_date"]),
+                     datetime.datetime.strptime(order_data["expected_delivery_date"], "%Y-%m-%d").date(),
                      str(order_data["payment_type"]),
                      str(order_data["l_dips"]),
                      str(order_data["appro_ship_sample"]),

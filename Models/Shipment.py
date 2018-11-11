@@ -33,6 +33,9 @@ class Shipment:
     def _get_id_shipment(self):
         return self.__id_shipment
 
+    def _set_id_shipment(self, id_shipment):
+        self.__id_shipment = id_shipment
+
     def _get_expedition_date(self):
         return self.__expedition_date
 
@@ -45,7 +48,7 @@ class Shipment:
     def _get_arrival_location(self):
         return self.__arrival_location
 
-    id_shipment = property(_get_id_shipment)
+    id_shipment = property(_get_id_shipment, _set_id_shipment)
     expedition_date = property(_get_expedition_date)
     transportation = property(_get_transportation)
     departure_location = property(_get_departure_location)

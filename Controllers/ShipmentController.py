@@ -119,5 +119,5 @@ class ShipmentController(Resource):
                             str(data["departure_location"]),
                             str(data["arrival_location"]))
         if "id_shipment" in data.keys():
-            shipment.set_id_shipment(int(data["id_shipment"]))
+            shipment.id_shipment = int(data["id_shipment"])
         return shipment

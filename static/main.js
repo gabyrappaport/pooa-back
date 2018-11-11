@@ -35,14 +35,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppRoutingModule", function() { return AppRoutingModule; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
-/* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
-/* harmony import */ var _main_form_order_main_form_order_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./main-form-order/main-form-order.component */ "./src/app/main-form-order/main-form-order.component.ts");
-/* harmony import */ var _newrelation_newrelation_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./newrelation/newrelation.component */ "./src/app/newrelation/newrelation.component.ts");
-/* harmony import */ var _recaporder_recaporder_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./recaporder/recaporder.component */ "./src/app/recaporder/recaporder.component.ts");
-/* harmony import */ var _signaletique_signaletique_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./signaletique/signaletique.component */ "./src/app/signaletique/signaletique.component.ts");
-/* harmony import */ var _tableau_tableau_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./tableau/tableau.component */ "./src/app/tableau/tableau.component.ts");
-/* harmony import */ var _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./dashboard/dashboard.component */ "./src/app/dashboard/dashboard.component.ts");
+/* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
+/* harmony import */ var _main_form_order_main_form_order_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./main-form-order/main-form-order.component */ "./src/app/main-form-order/main-form-order.component.ts");
+/* harmony import */ var _newrelation_newrelation_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./newrelation/newrelation.component */ "./src/app/newrelation/newrelation.component.ts");
+/* harmony import */ var _recaporder_recaporder_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./recaporder/recaporder.component */ "./src/app/recaporder/recaporder.component.ts");
+/* harmony import */ var _signaletique_signaletique_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./signaletique/signaletique.component */ "./src/app/signaletique/signaletique.component.ts");
+/* harmony import */ var _tableau_tableau_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./tableau/tableau.component */ "./src/app/tableau/tableau.component.ts");
+/* harmony import */ var _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./dashboard/dashboard.component */ "./src/app/dashboard/dashboard.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -58,17 +57,15 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-
 var routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_2__["LoginComponent"] },
-    { path: 'home', component: _home_home_component__WEBPACK_IMPORTED_MODULE_3__["HomeComponent"] },
-    { path: 'neworder', component: _main_form_order_main_form_order_component__WEBPACK_IMPORTED_MODULE_4__["MainFormOrderComponent"] },
-    { path: 'newrelation', component: _newrelation_newrelation_component__WEBPACK_IMPORTED_MODULE_5__["NewrelationComponent"] },
-    { path: 'recaporder', component: _recaporder_recaporder_component__WEBPACK_IMPORTED_MODULE_6__["RecaporderComponent"] },
-    { path: 'signaletique', component: _signaletique_signaletique_component__WEBPACK_IMPORTED_MODULE_7__["SignaletiqueComponent"] },
-    { path: 'tableau', component: _tableau_tableau_component__WEBPACK_IMPORTED_MODULE_8__["TableauComponent"] },
-    { path: 'revenus', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_9__["DashboardComponent"] },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'home', component: _home_home_component__WEBPACK_IMPORTED_MODULE_2__["HomeComponent"] },
+    { path: 'neworder', component: _main_form_order_main_form_order_component__WEBPACK_IMPORTED_MODULE_3__["MainFormOrderComponent"] },
+    { path: 'newrelation', component: _newrelation_newrelation_component__WEBPACK_IMPORTED_MODULE_4__["NewrelationComponent"] },
+    { path: 'recaporder', component: _recaporder_recaporder_component__WEBPACK_IMPORTED_MODULE_5__["RecaporderComponent"] },
+    { path: 'signaletique', component: _signaletique_signaletique_component__WEBPACK_IMPORTED_MODULE_6__["SignaletiqueComponent"] },
+    { path: 'tableau', component: _tableau_tableau_component__WEBPACK_IMPORTED_MODULE_7__["TableauComponent"] },
+    { path: 'revenus', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_8__["DashboardComponent"] },
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -745,7 +742,6 @@ var MainFormOrderComponent = /** @class */ (function () {
         this.http.request(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + 'partner?partner_type=client')
             .subscribe(function (res) {
             var data = res.json();
-            console.log(res);
             _this.clients_array = [];
             _this.clients_map = new Map();
             for (var i in data.data) {
@@ -807,10 +803,10 @@ var MainFormOrderComponent = /** @class */ (function () {
         delete value.TT;
         delete value.DP;
         if (this.selected_client === undefined) {
-            this.error_message = 'Veuillez entrer des données valides.';
+            this.error_message = 'Veuillez sélectionner un client.';
         }
         else if (this.selected_supplier === undefined) {
-            this.error_message = 'Veuillez entrer des données valides.';
+            this.error_message = 'Veuillez sélectionner un fournisseur.';
         }
         else {
             var order = {
@@ -829,7 +825,9 @@ var MainFormOrderComponent = /** @class */ (function () {
                 _this.router.navigate(['/recaporder']);
             }, function (error) {
                 if (error.status !== 200) {
-                    _this.error_message = 'Veuillez entrer des données valides.';
+                    console.log(error);
+                    var data = error.json();
+                    _this.error_message = data.data;
                 }
             });
         }
