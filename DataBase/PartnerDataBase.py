@@ -101,8 +101,8 @@ class PartnerDataBase:
             values = (partner.partner_type,
                       partner.company)
             Database.query("INSERT INTO Partners (partner_type, company) VALUES(?,?)", values)
-        except(ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except(ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def delete_partner(self, id_partner):
         """Delete a partner with the name of the company"""
@@ -115,8 +115,8 @@ class PartnerDataBase:
                       partner.company,
                       partner.id_partner)
             Database.query("UPDATE Partners SET partner_type = ?, company = ? WHERE id_partner = ? ", values)
-        except(ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except(ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def __list_to_dic_partner(self, partner):
         return {"id_partner": partner[0],

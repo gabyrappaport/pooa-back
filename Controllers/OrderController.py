@@ -127,7 +127,6 @@ class OrderController(Resource):
         return order
 
     def __product_from_data(self, id_order, data_product):
-        print(float(data_product["commission"]))
         product = Product(int(id_order),
                           str(data_product["reference"]),
                           str(data_product["color"]),
