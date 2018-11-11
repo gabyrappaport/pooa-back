@@ -39,7 +39,6 @@ Un ordre est un ensemble d'informations correspondants à une commande de produi
 fournisseur. Chaque ordre est livré par une ou plusieures livraisons.
 
 ### Comment utiliser l'application ?
-Vous arrivez sur la page de login, cliquez directement sur `Connexion` pour accéder à l'application.
 
 1. L'onglet _Nouvel Ordre_ permet d'ajouter une nouvelle commande avec les produits qu'elle
 contient et leurs informations, le nom du client et celui du fournisseur

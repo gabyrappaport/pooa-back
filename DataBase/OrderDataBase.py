@@ -1,5 +1,3 @@
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from DataBase.Helper.DatabaseConnector import Database
 from Controllers.Helper.WritingDataBaseError import WritingDataBaseError
 
@@ -91,8 +89,7 @@ class OrderDataBase:
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError(str(e))
 
-    def partner_income(self, partner_type):
-        number_of_months = 8
+    def partner_income(self, partner_type, months):
         """Give the income from every client in the month"""
         try:
             # Get clients id
@@ -100,9 +97,7 @@ class OrderDataBase:
             query_partner = Database.query("SELECT id_partner FROM Partners "
                                            "WHERE partner_type = ?", (partner_type,))
             for row in query_partner:
-                partner_stats[str(row[0])] = [0] * number_of_months
-            twelve_month_ago = datetime.today() - relativedelta(months=number_of_months - 1)
-            months = [(twelve_month_ago + relativedelta(months=i)).strftime('%m/%Y') for i in range(number_of_months)]
+                partner_stats[str(row[0])] = [0] * len(months)
             for i in months:
                 values = (i[0:2], i[3:7])  # month and year
                 sql = "SELECT id_partner, SUM(total_amount) " + \
@@ -114,7 +109,7 @@ class OrderDataBase:
                 query_income = Database.query(sql, values)
                 for row in query_income:
                     partner_stats[str(row[0])][months.index(i)] = row[1]
-            return {"months": months, "partner_stats": partner_stats}
+            return partner_stats
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError(str(e))
 
