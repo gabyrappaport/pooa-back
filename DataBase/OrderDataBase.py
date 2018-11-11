@@ -117,12 +117,10 @@ class OrderDataBase:
         except (ValueError, TypeError) as e:
             raise WritingDataBaseError("Wrong type value", e)
 
-
     def delete_order(self, id_order):
         """Delete order with its id"""
         Database.query("DELETE from Orders "
                        "WHERE id_order = ?", (id_order,))
-
 
     def __list_to_dic_order(self, order):
         return {"id_order": order[0],

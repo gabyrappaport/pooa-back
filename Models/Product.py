@@ -16,6 +16,16 @@ class Product(ExcelModel):
             raise TypeError("Price must be a number")
         if not isinstance(commission, float):
             raise TypeError("Commission must be a number")
+        if reference == "":
+            raise ValueError("Enter a valid reference")
+        if color == "":
+            raise ValueError("Enter a valid color")
+        if meter == "":
+            raise ValueError("Enter a valid number of meter")
+        if price == "":
+            raise ValueError("Enter a valid price")
+        if commission == "":
+            raise ValueError("Enter a valid commission")
 
         self.__id_product = id_product
         self.__id_order = id_order
@@ -38,11 +48,11 @@ class Product(ExcelModel):
         return self.__price * self.__meter
 
     def get_price_with_commission(self):
-        return (self.__commission / 100 * self.__price * self.__meter).__round__(2)
+        return ((1 + self.__commission / 100) * self.__price * self.__meter).__round__(2)
 
     def _get_id_product(self):
         return self.__id_product
-    
+
     def _set_id_product(self, id_product):
         self.__id_product = id_product
 

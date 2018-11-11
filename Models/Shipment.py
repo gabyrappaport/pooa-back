@@ -14,6 +14,14 @@ class Shipment:
             raise TypeError("Departure location must be a string")
         if not isinstance(arrival_location, str):
             raise TypeError("Arrival location must be a string")
+        if expedition_date == "":
+            raise ValueError("Enter a valid expedition_date")
+        if transportation == "":
+            raise ValueError("Enter a valid transportation mode")
+        if departure_location == "":
+            raise ValueError("Enter a valid departure_location")
+        if arrival_location == "":
+            raise ValueError("Enter a valid arrival_location")
 
         self.__id_shipment = id_shipment
         self.__expedition_date = expedition_date

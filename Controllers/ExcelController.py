@@ -40,7 +40,7 @@ class ExcelController(Resource):
                 """Recovery of order's client data."""
                 client_data = self.partner_db.get_partner(int(order_data["id_client"]))
                 client = ExcelController.__get_partner_info(client_data)
-                
+
                 """Recovery of order's supplier data."""
                 supplier_data = self.partner_db.get_partner(int(order_data["id_supplier"]))
                 supplier = ExcelController.__get_partner_info(supplier_data)
@@ -72,20 +72,17 @@ class ExcelController(Resource):
     @staticmethod
     def __order_from_data(order_data):
         """We create an Order object thanks information in the database"""
-        if order_data is None:
-            raise ValueError("please enter a valid id_order")
-        if order_data is not None:
-            return Order(int(order_data["id_supplier"]),
-                         int(order_data["id_client"]),
-                         str(order_data["expected_delivery_date"]),
-                         str(order_data["payment_type"]),
-                         str(order_data["l_dips"]),
-                         str(order_data["appro_ship_sample"]),
-                         str(order_data["appro_s_off"]),
-                         str(order_data["ship_sample_2h"]),
-                         total_amount=str(order_data["total_amount"]),
-                         creation_date=(order_data["creation_date"]),
-                         id_order=int(order_data["id_order"]))
+        return Order(int(order_data["id_supplier"]),
+                     int(order_data["id_client"]),
+                     str(order_data["expected_delivery_date"]),
+                     str(order_data["payment_type"]),
+                     str(order_data["l_dips"]),
+                     str(order_data["appro_ship_sample"]),
+                     str(order_data["appro_s_off"]),
+                     str(order_data["ship_sample_2h"]),
+                     total_amount=str(order_data["total_amount"]),
+                     creation_date=(order_data["creation_date"]),
+                     id_order=int(order_data["id_order"]))
 
     @staticmethod
     def __product_from_data(id_order, p):

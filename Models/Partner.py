@@ -12,6 +12,8 @@ class Partner(ExcelModel):
             raise TypeError("Company must be a string")
         if company == "":
             raise ValueError("Enter a valid company name")
+        if partner_type == "":
+            raise ValueError("Enter a valid partner type")
 
         self.__id_partner = id_partner
         self.__partner_type = partner_type
