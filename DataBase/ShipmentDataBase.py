@@ -59,8 +59,8 @@ class ShipmentDataBase:
                            "VALUES (?,?,?,?)", values)
             id_shipment = Database.query("SELECT last_insert_rowid() FROM Shipments").fetchone()
             return id_shipment[0]
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except (ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def update_shipment(self, shipment):
         try:
@@ -75,8 +75,8 @@ class ShipmentDataBase:
                            "departure_location = ?,"
                            "arrival_location = ?"
                            "WHERE id_shipment = ?", values)
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except (ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def delete_shipment(self, id_shipment):
         """Delete shipment with its id"""

@@ -41,7 +41,44 @@ class ShipmentController(Resource):
             else:
                 return self.__get_shipment_all_shipments()
         except (ValueError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
+
+    def post(self):
+        try:
+            data = request.get_json(force=True)
+            shipment = self.__shipment_from_data(data)
+            id_shipment = self.shipment_db.add_shipment(shipment)
+            if "products" in data.keys():
+                for id_product in data["products"]:
+                    self.product_db.set_id_shipment(id_product, id_shipment)
+            return HttpResponse(HttpStatus.OK).get_response()
+        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
+
+    def put(self):
+        try:
+            data = request.get_json(force=True)
+            shipment = self.__shipment_from_data(data)
+            self.shipment_db.update_shipment(shipment)
+            for id_product in data["added_products"]:
+                self.product_db.set_id_shipment(id_product, shipment.id_shipment)
+            for id_product in data["removed_products"]:
+                self.product_db.delete_id_shipment(id_product)
+            return HttpResponse(HttpStatus.OK).get_response()
+        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
+
+    def delete(self):
+        try:
+            id_shipment = request.args.get("id_shipment")
+            self.shipment_db.delete_shipment(id_shipment)
+            id_product_to_del = self.product_db.get_id_product_from_shipment(id_shipment)
+            if id_product_to_del:
+                for id_product in id_product_to_del:
+                    self.product_db.delete_id_shipment(id_product)
+            return HttpResponse(HttpStatus.OK).get_response()
+        except (werkzeug.exceptions.BadRequest, ValueError) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def __get_shipments_by_id_order(self, id_order):
         shipments = self.shipment_db.get_shipments_id_order(id_order)
@@ -57,8 +94,7 @@ class ShipmentController(Resource):
 
     def __get_shipment_by_id_shipment(self, id_shipment):
         shipment = self.shipment_db.get_shipment_id_shipment(id_shipment)
-        if shipment is not None:
-            self.__set_products(shipment)
+        self.__set_products(shipment)
         return HttpResponse(HttpStatus.OK,
                             data=shipment).get_response()
 
@@ -77,47 +113,11 @@ class ShipmentController(Resource):
         else:
             shipments["products"] = self.product_db.get_products_from_id_shipment(shipments['id_shipment'])
 
-    def post(self):
-        try:
-            data = request.get_json(force=True)
-            shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%Y-%m-%d").date(),
-                                str(data["transportation"]),
-                                str(data["departure_location"]),
-                                str(data["arrival_location"]))
-            id_shipment = self.shipment_db.add_shipment(shipment)
-            print(id_shipment)
-            if "products" in data.keys():
-                for id_product in data["products"]:
-                    self.product_db.set_id_shipment(id_product, id_shipment)
-            return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
-
-    def put(self):
-        try:
-            data = request.get_json(force=True)
-            shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%Y-%m-%d").date(),
-                                str(data["transportation"]),
-                                str(data["departure_location"]),
-                                str(data["arrival_location"]),
-                                id_shipment=int(data["id_shipment"]))
-            self.shipment_db.update_shipment(shipment)
-            for id_product in data["added_products"]:
-                self.product_db.set_id_shipment(id_product, shipment.id_shipment)
-            for id_product in data["removed_products"]:
-                self.product_db.delete_id_shipment(id_product)
-            return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
-
-    def delete(self):
-        try:
-            id_shipment = request.args.get("id_shipment")
-            self.shipment_db.delete_shipment(id_shipment)
-            id_product_to_del = self.product_db.get_id_product_from_shipment(id_shipment)
-            if id_product_to_del:
-                for id_product in id_product_to_del:
-                    self.product_db.delete_id_shipment(id_product)
-            return HttpResponse(HttpStatus.OK).get_response()
-        except (werkzeug.exceptions.BadRequest, ValueError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+    def __shipment_from_data(self, data):
+        shipment = Shipment(datetime.datetime.strptime(data["expedition_date"], "%Y-%m-%d").date(),
+                            str(data["transportation"]),
+                            str(data["departure_location"]),
+                            str(data["arrival_location"]))
+        if "id_shipment" in data.keys():
+            shipment.set_id_shipment(int(data["id_shipment"]))
+        return shipment

@@ -34,8 +34,8 @@ class OrderController(Resource):
                 return self.__get_order_by_id(request.args.get("id_order"))
             else:
                 return self.__get_all_orders()
-        except (werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+        except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def post(self):
         try:
@@ -52,7 +52,7 @@ class OrderController(Resource):
             self.order_db.set_total_amount(total_amount, id_order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def put(self):
         try:
@@ -63,7 +63,7 @@ class OrderController(Resource):
             self.order_db.update_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def delete(self):
         try:
@@ -74,8 +74,8 @@ class OrderController(Resource):
             for i in products:
                 self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
-        except (werkzeug.exceptions.BadRequest, ValueError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+        except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def __get_order_by_id(self, id_order):
         order = self.order_db.get_order(id_order)
@@ -127,7 +127,6 @@ class OrderController(Resource):
         return order
 
     def __product_from_data(self, id_order, data_product):
-        print(float(data_product["commission"]))
         product = Product(int(id_order),
                           str(data_product["reference"]),
                           str(data_product["color"]),

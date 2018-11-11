@@ -32,8 +32,8 @@ class ProductDatabase:
                                "SET id_shipment = ?"
                                "WHERE id_product = ?", values)
             return id_product[0]
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except (ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def delete_product(self, id_product):
         """Delete a product with its id"""
@@ -69,8 +69,8 @@ class ProductDatabase:
                 product = self.__list_to_dic_product(row)
                 result.append(product)
             return result
-        except(ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except(ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def update_product(self, product):
         try:
@@ -89,14 +89,14 @@ class ProductDatabase:
                            "price = ?,"
                            "commission = ?"
                            "WHERE id_product = ?", values)
-            if product.id_shipment():
+            if product.id_shipment:
                 values = (int(product.id_shipment()),
                           int(product.id_product()))
                 Database.query("UPDATE Products"
                                " SET id_shipment = ?"
                                "WHERE id_product = ?", values)
         except (ValueError, TypeError) as e:
-            raise WritingDataBaseError("Wrong type Value.")
+            raise WritingDataBaseError(str(e))
 
     def set_id_shipment(self, id_product, id_shipment):
         """Set id_shipment in database"""
@@ -104,14 +104,14 @@ class ProductDatabase:
             Database.query("UPDATE Products "
                            "SET id_shipment = ? "
                            "WHERE id_product = ?", (id_shipment, id_product))
-        except(ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except(ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def delete_id_shipment(self, id_product):
         try:
             Database.query("UPDATE Products SET id_shipment = null WHERE id_product = ?", (id_product,))
-        except(ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except(ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def get_id_product_from_shipment(self, id_shipment):
         try:
@@ -121,8 +121,8 @@ class ProductDatabase:
             for row in query_product_from_ship:
                 result.append(row[0])
             return result
-        except(ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except(ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def __list_to_dic_product(self, product):
         if product[2] is None:

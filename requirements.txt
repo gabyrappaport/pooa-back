@@ -1,8 +1,8 @@
 aniso8601==4.0.1
 et-xmlfile==1.0.1
-Flask==1.0.2
-Flask-Cors==3.0.6
-Flask-RESTful==0.3.6
+flask==1.0.2
+flask-Cors==3.0.6
+flask-RESTful==0.3.6
 itsdangerous==1.1.0
 jdcal==1.4
 Jinja2==2.10

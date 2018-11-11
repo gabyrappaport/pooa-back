@@ -48,10 +48,11 @@ class OrderDataBase:
                            "VALUES (?,?,?,?,?,?,?,?,?,?)", values)
             id_order = Database.query("SELECT last_insert_rowid() FROM Orders").fetchone()
             return id_order[0]
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except (ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def update_order(self, order):
+        print(order)
         try:
             values = (int(order.id_supplier),
                       int(order.id_client),
@@ -78,8 +79,8 @@ class OrderDataBase:
                            "complete_delivery_date= ?, "
                            "complete_payment_date= ? "
                            "WHERE id_order = ?", values)
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except (ValueError, TypeError) as e :
+            raise WritingDataBaseError(str(e))
 
     def set_total_amount(self, total_amount, id_order):
         """Set total_amount in database"""
@@ -87,8 +88,8 @@ class OrderDataBase:
             Database.query("UPDATE Orders "
                            "SET total_amount = ?"
                            "WHERE id_order = ?", (total_amount, id_order))
-        except (ValueError, TypeError):
-            raise WritingDataBaseError("Wrong type Value.")
+        except (ValueError, TypeError) as e:
+            raise WritingDataBaseError(str(e))
 
     def partner_income(self, partner_type):
         number_of_months = 8
@@ -110,14 +111,12 @@ class OrderDataBase:
                       "AND strftime('%m', creation_date) = ? " + \
                       "AND strftime('%Y', creation_date) = ? " + \
                       "GROUP BY id_partner"
-                print(sql)
                 query_income = Database.query(sql, values)
                 for row in query_income:
                     partner_stats[str(row[0])][months.index(i)] = row[1]
-            print(partner_stats)
             return {"months": months, "partner_stats": partner_stats}
         except (ValueError, TypeError) as e:
-            raise WritingDataBaseError("Wrong type value", e)
+            raise WritingDataBaseError(str(e))
 
     def delete_order(self, id_order):
         """Delete order with its id"""
