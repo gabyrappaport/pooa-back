@@ -29,7 +29,7 @@ _**Projet réalisé pour le cours de POOA par Gabrielle Rappaport, Alix Mallard 
     python3 generate_db.py
     python3 run.py
     ```
-6. Aller sur l'application [ici](http://127.0.0.1:5000/) _(http://127.0.0.1:5000/)_
+6. Aller sur l'application (sur google chrome de préférence) [ici](http://127.0.0.1:5000/) _(http://127.0.0.1:5000/)_
 
 7. Pour quitter l'environnement faites ```deactivate```.
 
