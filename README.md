@@ -6,7 +6,7 @@
 Cette application permet de gérer des ordres.
 Un ordre est un ensemble d'informations correspondants à une commande de produits pour un client et commandée à un fournisseur. Chaque ordre est livré par une ou plusieures livraisons.
 
-##Comment utiliser l'application
+## Comment utiliser l'application
 Vous arrivez sur la page de login, cliquez directement sur 'Connexion' pour accéder à l'application.
 
 L'onglet Nouvel Ordre permet d'ajouter une nouvelle commande avec les produits qu'elle
@@ -42,7 +42,7 @@ Notre base de données est en SQLite car légère et correspondant à nos attent
 d'implémentation de l'application et contient 4 tables contenant les ordres, partnenaires, expéditions et produits.
 (voir Annexe à la fin)
 
-##Installation
+## Installation
 Si vous n'avez pas virtualenv, faire
 ```
 pip3 install virtualenv
@@ -70,7 +70,7 @@ python3 run.py
 Aller sur l'application [ici](http://127.0.0.1:5000/)
 
 Pour quitter l'environnement faites ```deactivate```.
-##Annexe
+## Annexe
 Description des tables de la base de donnée
 
 |Orders|
