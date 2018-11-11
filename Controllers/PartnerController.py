@@ -39,7 +39,7 @@ class PartnerController(Resource):
             else:
                 return self.__get_all_partners()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def post(self):
         try:
@@ -49,7 +49,7 @@ class PartnerController(Resource):
             self.partner_db.add_partner(partner)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def put(self):
         try:
@@ -60,7 +60,7 @@ class PartnerController(Resource):
             self.partner_db.update_partner(partner)
             return HttpResponse(HttpStatus.OK).get_response()
         except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def delete(self):
         try:
@@ -68,7 +68,7 @@ class PartnerController(Resource):
             self.partner_db.delete_partner(id_partner)
             return HttpResponse(HttpStatus.OK).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def __get_all_partners(self):
         return HttpResponse(HttpStatus.OK,

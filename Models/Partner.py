@@ -18,8 +18,6 @@ class Partner(ExcelModel):
         self.__company = company
 
     def print_to_cell(self, worksheet, cell):
-        # worksheet[str(cell[0])] = self.__id_partner
-        # worksheet[str(cell[1])] = self.__partner_type
         worksheet[str(cell[2])] = self.__company
 
     def _get_id_partner(self):

@@ -33,7 +33,6 @@ class ExcelController(Resource):
                 order = ExcelController.__order_from_data(order_data)
 
                 """ Recovery of products order and total amount."""
-                
                 products, total_amount = self.__get_products_info_and_total_amount(id_order)
                 order.set_products(products)
                 order.set_total_amount(total_amount)
@@ -56,7 +55,7 @@ class ExcelController(Resource):
                 return send_from_directory(directory=uploads, filename=filename)
 
         except (ValueError, NameError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def __get_products_info_and_total_amount(self, id_order):
         # We create an Order object with the information in the database

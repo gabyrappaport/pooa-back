@@ -35,7 +35,7 @@ class OrderController(Resource):
             else:
                 return self.__get_all_orders()
         except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def post(self):
         try:
@@ -51,8 +51,8 @@ class OrderController(Resource):
                 total_amount += product.get_price_with_commission()
             self.order_db.set_total_amount(total_amount, id_order)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def put(self):
         try:
@@ -62,8 +62,8 @@ class OrderController(Resource):
             order.total_amount = updated_total_amount
             self.order_db.update_order(order)
             return HttpResponse(HttpStatus.OK).get_response()
-        except (ValueError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+        except (ValueError, TypeError, WritingDataBaseError, KeyError, werkzeug.exceptions.BadRequest) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def delete(self):
         try:
@@ -74,8 +74,8 @@ class OrderController(Resource):
             for i in products:
                 self.product_db.delete_product(i["id_product"])
             return HttpResponse(HttpStatus.OK).get_response()
-        except (werkzeug.exceptions.BadRequest, ValueError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+        except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()
 
     def __get_order_by_id(self, id_order):
         order = self.order_db.get_order(id_order)

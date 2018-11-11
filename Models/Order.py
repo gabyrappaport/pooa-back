@@ -25,7 +25,6 @@ class Order(ExcelModel):
         if not isinstance(payment_type, str):
             raise TypeError("Payment type must be a string")
 
-
         self.__id_order = id_order
         self.__supplier = id_supplier
         self.__client = id_client

@@ -23,4 +23,4 @@ class DashboardController(Resource):
             return HttpResponse(HttpStatus.OK,
                                 data=data).get_response()
         except (werkzeug.exceptions.BadRequest, ValueError, TypeError) as e:
-            return HttpResponse(HttpStatus.Bad_Request, message=str(e)).get_response()
+            return HttpResponse(HttpStatus.Bad_Request, data=str(e)).get_response()

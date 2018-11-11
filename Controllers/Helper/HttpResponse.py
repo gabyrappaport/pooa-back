@@ -19,6 +19,7 @@ class HttpResponse:
                         status=self.http_status.value["code"],
                         mimetype="application/json")
 
+
 class HttpStatus(Enum):
     OK = {"code": 200, "status": "OK"}
     Bad_Request = {"code": 400, "status": "Bad Request"}
